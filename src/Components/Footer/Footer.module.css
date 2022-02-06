@@ -1,0 +1,31 @@
+.wrapper {
+  position: fixed;
+  bottom: 5px;
+  right: 2%;
+  height: 20px;
+  overflow: hidden;
+}
+.container {
+  height: 100%;
+  animation: scroll 10s ease-out infinite alternate;
+}
+@keyframes scroll {
+  10% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(-40px);
+  }
+}
+.item {
+  height: 20px;
+  display: flex;
+  justify-content: center;
+}
+.item:nth-child(3) {
+  color: green;
+  font-weight: 600;
+}

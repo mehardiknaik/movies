@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ThemeProvider } from "styled-components";
+import { HashRouter } from "react-router-dom";
 
 const theme = {
   breakpoints: {
@@ -17,9 +18,11 @@ const theme = {
 
 ReactDOM.render(
   <React.StrictMode>
+    <HashRouter>
     <ThemeProvider theme={theme}>
       <App />
     </ThemeProvider>
+    </HashRouter>
   </React.StrictMode>,
   document.getElementById("root")
 );

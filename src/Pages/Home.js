@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import MovieWidget from "../Components/MovieWidget";
 import styled from "styled-components";
@@ -7,6 +7,7 @@ import CustomPagination from "../Components/CustomPagination";
 import breakpoint from "styled-components-breakpoint";
 import Header from "../Components/Header/Header";
 import Curousel from "../Components/Curousel";
+import { PageContext } from "../App";
 
 const MainContainer = styled.div`
   display: grid;
@@ -25,7 +26,7 @@ const Home = () => {
   const [movies, setmovies] = useState([]);
   const [upcomingmovies, setupcomingmovies] = useState([]);
   const [numOfPages, setNumOfPages] = useState();
-  const [page, setPage] = useState(1);
+  const {page, setPage} =useContext(PageContext);;
 
   const getMovies = async () => {
     const { data } = await axios.get(`${url}discover/movie`, {
@@ -67,7 +68,7 @@ const Home = () => {
       <Header />
       <Container sx={{ marginTop: "15px", marginBottom: "15px" }}>
         {upcomingmovies.length > 0 && (
-          <Curousel upcomingmovies={upcomingmovies}/>
+          <Curousel upcomingmovies={upcomingmovies} />
         )}
         {movies.length > 0 && (
           <MainContainer>
@@ -80,12 +81,13 @@ const Home = () => {
                   movie.original_language === "mr" ? "Marathi" : "Hindi"
                 }
                 release_date={movie.release_date}
+                id={movie.id}
               />
             ))}
           </MainContainer>
         )}
         {numOfPages > 1 && (
-          <CustomPagination setPage={setPage} numOfPages={numOfPages} />
+          <CustomPagination setPage={setPage} numOfPages={numOfPages}page={page} />
         )}
       </Container>
     </>

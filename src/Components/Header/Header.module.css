@@ -23,11 +23,11 @@
   }
 }
 
-@media (max-width: 425px) {
+/* @media (max-width: 425px) {
   .Container {
     justify-content: center;
   }
-}
+} */
 input[type="checkbox"] {
   position: absolute;
   opacity: 0;
@@ -52,6 +52,7 @@ input[type="checkbox"]:checked ~ div {
 .text {
   display: flex;
   font-size: 1.6rem;
+  overflow: hidden;
 }
 li {
   list-style: none;

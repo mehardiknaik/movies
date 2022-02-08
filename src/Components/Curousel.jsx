@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import React from "react";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const CurouselContainer = styled.div`
@@ -48,6 +49,7 @@ const Curousel = ({ upcomingmovies }) => {
     .filter((c) => (c.backdrop_path ? c : false))
     .map((item, index) => {
       return (
+            <Link to={`/${item.id}`}>
         <CurouselContainer key={index}>
           <img
             src={`https://image.tmdb.org/t/p/original/${item.backdrop_path}`}
@@ -58,6 +60,7 @@ const Curousel = ({ upcomingmovies }) => {
             <div className="subtitle">{dayjs(item.release_date).format('D-MMMM-YYYY')}</div>
           </TitleContainer>
         </CurouselContainer>
+          </Link>
       );
     });
 

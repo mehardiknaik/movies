@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { prominent } from "color.js";
 import Noposter from "../Images/Noposter.jpg";
 import dayjs from "dayjs";
+import { Link } from "react-router-dom";
 const WidgetContainer = styled.div`
   background: #f4f4f4;
   border-radius: 10px;
@@ -47,7 +48,13 @@ const BottomContainer = styled.div`
     justify-content: space-between;
   }
 `;
-const MovieWidget = ({ title, poster_path, original_language,release_date }) => {
+const MovieWidget = ({
+  title,
+  poster_path,
+  original_language,
+  release_date,
+  id
+}) => {
   const [Colour, setColour] = useState();
   const image = poster_path
     ? `https://image.tmdb.org/t/p/w300/${poster_path}`
@@ -65,14 +72,16 @@ const MovieWidget = ({ title, poster_path, original_language,release_date }) => 
 
   return (
     <WidgetContainer>
-      <img src={image} width={'100%'} height={'100%'} alt="" />
-      <BottomContainer Colour={Colour}>
-        <div className="title">{title}</div>
-        <div className="subtitle">
-          <div>{original_language}</div>
-          <div>{dayjs(release_date).format('D-MMM-YY')}</div>
-        </div>
-      </BottomContainer>
+      <Link to={`/${id}`}>
+        <img src={image} width={"100%"} height={"100%"} alt="" />
+        <BottomContainer Colour={Colour}>
+          <div className="title">{title}</div>
+          <div className="subtitle">
+            <div>{original_language}</div>
+            <div>{dayjs(release_date).format("D-MMM-YY")}</div>
+          </div>
+        </BottomContainer>
+      </Link>
     </WidgetContainer>
   );
 };

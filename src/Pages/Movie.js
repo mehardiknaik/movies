@@ -43,6 +43,9 @@ const Movie = () => {
               release_date={movie?.release_date || movie?.first_air_date}
               vote_average={movie?.vote_average}
               runtime={movie?.runtime}
+              genres={movie?.genres}
+              spoken_languages={movie?.spoken_languages}
+              overview={movie?.overview}
             />
           </Container>
         </>

@@ -7,7 +7,9 @@ import Search from "./Pages/Search";
 import Pagestate from "./Context/Pagestate";
 import Typestate from "./Context/Typestate";
 import Header from "./Components/Header/Header";
-
+import 'aos/dist/aos.css'; 
+import AOS from "aos";
+AOS.init({duration: 2000});
 function App() {
   return (
     <>

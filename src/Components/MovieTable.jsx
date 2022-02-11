@@ -73,7 +73,7 @@ const MovieTable = ({ movies }) => {
           original_language={
             movie.original_language === "mr" ? "Marathi" : "Hindi"
           }
-          release_date={movie.release_date ||movie.first_air_date}
+          release_date={movie.release_date || movie.first_air_date}
           id={movie.id}
         />
       ))}
@@ -102,9 +102,8 @@ const MovieWidget = ({
   // useEffect(() => {
   //   Getcolor();
   // }, []);
-
   return (
-    <WidgetContainer>
+    <WidgetContainer data-aos="fade-up">
       <Link to={`/${id}`}>
         <img src={image} width={"100%"} height={"100%"} alt="" />
         <BottomContainer Colour={Colour}>

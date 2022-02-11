@@ -6,12 +6,14 @@ import Movie from "./Pages/Movie";
 import Search from "./Pages/Search";
 import Pagestate from "./Context/Pagestate";
 import Typestate from "./Context/Typestate";
+import Header from "./Components/Header/Header";
 
 function App() {
   return (
     <>
       <Pagestate>
         <Typestate>
+          <Header/>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />

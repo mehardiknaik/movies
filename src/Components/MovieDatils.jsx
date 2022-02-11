@@ -48,7 +48,7 @@ const MovieDatils = ({
   const image = poster_path
     ? `https://image.tmdb.org/t/p/w300/${poster_path}`
     : Noposter;
-
+    
   return (
     <TopContainer>
       <div className="imageContainer">

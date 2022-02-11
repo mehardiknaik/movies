@@ -38,9 +38,9 @@ const TitleContainer = styled.div`
     font-size: 12px;
     color: #b6b6b6;
   }
-  & div{
-      margin-left: 10px;
-      margin-bottom: 10px;
+  & div {
+    margin-left: 10px;
+    margin-bottom: 10px;
   }
 `;
 
@@ -49,18 +49,22 @@ const Curousel = ({ upcomingmovies }) => {
     .filter((c) => (c.backdrop_path ? c : false))
     .map((item, index) => {
       return (
-            <Link to={`/${item.id}`}>
-        <CurouselContainer key={index}>
-          <img
-            src={`https://image.tmdb.org/t/p/w500/${item.backdrop_path}`}
-            alt="First slide"
-          />
-          <TitleContainer>
-            <div>{item.title}</div>
-            <div className="subtitle">{dayjs(item.release_date).format('D-MMMM-YYYY')}</div>
-          </TitleContainer>
-        </CurouselContainer>
-          </Link>
+        <Link to={`/${item.id}`}>
+          <CurouselContainer key={index}>
+            <img
+              src={`https://image.tmdb.org/t/p/w500/${item.backdrop_path}`}
+              alt="First slide"
+            />
+            <TitleContainer>
+              <div>{item.title || item.name}</div>
+              <div className="subtitle">
+                {dayjs(item.release_date || item.first_air_date).format(
+                  "D-MMMM-YYYY"
+                )}
+              </div>
+            </TitleContainer>
+          </CurouselContainer>
+        </Link>
       );
     });
 
@@ -79,7 +83,8 @@ const Curousel = ({ upcomingmovies }) => {
       infinite
       disableButtonsControls
       items={items}
-        autoPlay
+      autoPlay
+      disableDotsControls
       autoPlayInterval={1500}
       animationDuration={1000}
       responsive={responsive}

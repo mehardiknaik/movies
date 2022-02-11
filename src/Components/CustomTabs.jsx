@@ -1,23 +1,22 @@
 import { Tab, Tabs } from "@mui/material";
 import React, { useContext } from "react";
-import { PageContext } from "../Context/Pagestate";
 import { TypeContext } from "../Context/Typestate";
 
-const CustomTabs = () => {
+const CustomTabs = ({ page, setPage }) => {
   const { type, setType } = useContext(TypeContext);
-  const { setPage } = useContext(PageContext);
 
   const changeTab = (value) => {
     console.log(value);
     setType(value);
     setPage(1);
+    console.log(page);
   };
   return (
     <>
       <Tabs
         value={type}
-        indicatorColor="primary"
-        textColor="primary"
+        indicatorColor="secondary"
+        textColor="secondary"
         onChange={(event, newValue) => {
           changeTab(newValue);
         }}

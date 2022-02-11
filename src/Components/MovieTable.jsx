@@ -68,12 +68,12 @@ const MovieTable = ({ movies }) => {
       {movies.map((movie) => (
         <MovieWidget
           key={movie.id}
-          title={movie.title}
+          title={movie.title || movie.name}
           poster_path={movie.poster_path}
           original_language={
             movie.original_language === "mr" ? "Marathi" : "Hindi"
           }
-          release_date={movie.release_date}
+          release_date={movie.release_date ||movie.first_air_date}
           id={movie.id}
         />
       ))}

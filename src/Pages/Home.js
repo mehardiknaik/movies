@@ -34,7 +34,7 @@ const Home = () => {
   };
 
   const getUpcomignMovies = async () => {
-    const { data } = await axios.get(`${url}movie/upcoming`, {
+    const { data } = await axios.get(`${url}${type}/popular`, {
       params: {
         api_key: process.env.REACT_APP_API_KEY,
         language: "hi-IN|mr-IN",
@@ -51,12 +51,11 @@ const Home = () => {
 
   useEffect(() => {
     getUpcomignMovies();
-  }, []);
+  }, [type]);
   return (
     <>
-      <Header />
       <Container sx={{ marginTop: "15px", marginBottom: "15px" }}>
-        <CustomTabs />
+        <CustomTabs page={page} setPage={setPage}/>
         {upcomingmovies.length > 0 && (
           <Curousel upcomingmovies={upcomingmovies} />
         )}

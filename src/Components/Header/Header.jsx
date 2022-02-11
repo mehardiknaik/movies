@@ -1,25 +1,17 @@
 import logo from "./logo.svg";
 import styles from "./Header.module.css";
-import back from "../../Images/back.svg";
 import search from "../../Images/search.svg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { TypeContext } from "../../Context/Typestate";
+import { useContext } from "react";
 
-const Header = ({ title = "Movies", isMovie = false }) => {
-  let navigate = useNavigate();
+const Header = () => {
+  const { type} = useContext(TypeContext);
   return (
     <div className={styles.Container}>
       <div className={styles.leftContainer}>
-        {isMovie ? (
-          <div style={{cursor:'pointer',marginRight:'10px'}} onClick={() => navigate(-1)}>
-            <img src={back} width={20} height={20} alt="" />
-          </div>
-        ) : (
-          <img src={logo} width={35} height={35} alt="" />
-        )}
-        <div className={styles.text}>
-          {title}
-          {!isMovie && <>(Hindi & Marathi)</>}
-        </div>
+        <img src={logo} width={35} height={35} alt="" />
+        <div className={styles.text}>{type.toUpperCase()}</div>
       </div>
       <div>
         <Link to="/search">

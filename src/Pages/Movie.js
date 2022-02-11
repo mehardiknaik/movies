@@ -1,19 +1,20 @@
 import { Container } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../Components/Header/Header";
 import MovieDatils from "../Components/MovieDatils";
 import Player from "../Components/Player";
+import { TypeContext } from "../Context/Typestate";
 
 const Movie = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState();
   const url = "https://api.themoviedb.org/3/";
-
+  const { type} = useContext(TypeContext);
   const getMovie = async () => {
     await axios
-      .get(`${url}movie/${id}`, {
+      .get(`${url}${type}/${id}`, {
         params: {
           api_key: process.env.REACT_APP_API_KEY,
           language: "en-US",
@@ -34,13 +35,12 @@ const Movie = () => {
     <>
       {movie && (
         <>
-          <Header title={movie?.title} isMovie />
           <Container>
             {/* <Player id="xaYJgKiIH0Q"/> */}
             <MovieDatils
               poster_path={movie?.poster_path}
-              title={movie?.title}
-              release_date={movie?.release_date}
+              title={movie?.title || movie?.name}
+              release_date={movie?.release_date || movie?.first_air_date}
               vote_average={movie?.vote_average}
               runtime={movie?.runtime}
             />

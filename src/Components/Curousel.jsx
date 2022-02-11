@@ -52,7 +52,7 @@ const Curousel = ({ upcomingmovies }) => {
             <Link to={`/${item.id}`}>
         <CurouselContainer key={index}>
           <img
-            src={`https://image.tmdb.org/t/p/original/${item.backdrop_path}`}
+            src={`https://image.tmdb.org/t/p/w500/${item.backdrop_path}`}
             alt="First slide"
           />
           <TitleContainer>
@@ -80,7 +80,7 @@ const Curousel = ({ upcomingmovies }) => {
       disableButtonsControls
       items={items}
         autoPlay
-      autoPlayInterval={2000}
+      autoPlayInterval={1500}
       animationDuration={1000}
       responsive={responsive}
     />

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { prominent } from "color.js";
 import Noposter from "../Images/Noposter.jpg";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
+import breakpoint from "styled-components-breakpoint";
 const WidgetContainer = styled.div`
   background: #f4f4f4;
   border-radius: 10px;
@@ -48,12 +49,44 @@ const BottomContainer = styled.div`
     justify-content: space-between;
   }
 `;
+
+const MainContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  ${breakpoint("sm")`
+  grid-template-columns: 1fr 1fr 1fr;
+`}
+  ${breakpoint("lg")`
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+`}
+`;
+
+const MovieTable = ({ movies }) => {
+  return (
+    <MainContainer>
+      {movies.map((movie) => (
+        <MovieWidget
+          key={movie.id}
+          title={movie.title}
+          poster_path={movie.poster_path}
+          original_language={
+            movie.original_language === "mr" ? "Marathi" : "Hindi"
+          }
+          release_date={movie.release_date}
+          id={movie.id}
+        />
+      ))}
+    </MainContainer>
+  );
+};
+
 const MovieWidget = ({
   title,
   poster_path,
   original_language,
   release_date,
-  id
+  id,
 }) => {
   const [Colour, setColour] = useState();
   const image = poster_path
@@ -85,5 +118,4 @@ const MovieWidget = ({
     </WidgetContainer>
   );
 };
-
-export default MovieWidget;
+export default MovieTable;

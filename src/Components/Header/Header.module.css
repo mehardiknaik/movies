@@ -10,6 +10,12 @@
   padding: 0 7px;
   transition: all 0.5s ease;
   backdrop-filter: blur(10px);
+  justify-content: space-between;
+}
+.leftContainer {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
 }
 .image {
   animation: rotation 3s infinite alternate;
@@ -52,11 +58,16 @@ input[type="checkbox"]:checked ~ div {
 .text {
   display: flex;
   font-size: 1.6rem;
-  overflow: hidden;
+  white-space: nowrap;
+  width: 90%;
 }
 li {
   list-style: none;
 }
 input {
   -webkit-tap-highlight-color: transparent;
+}
+.leftContainer a{
+  align-items: center;
+  display: flex;
 }

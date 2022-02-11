@@ -1,35 +1,24 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import MovieWidget from "../Components/MovieWidget";
-import styled from "styled-components";
 import { Container } from "@mui/material";
 import CustomPagination from "../Components/CustomPagination";
-import breakpoint from "styled-components-breakpoint";
 import Header from "../Components/Header/Header";
 import Curousel from "../Components/Curousel";
-import { PageContext } from "../App";
-
-const MainContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  ${breakpoint("sm")`
-  grid-template-columns: 1fr 1fr 1fr;
-`}
-  ${breakpoint("lg")`
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-`}
-`;
+import MovieTable from "../Components/MovieTable";
+import { PageContext } from "../Context/Pagestate";
+import CustomTabs from "../Components/CustomTabs";
+import { TypeContext } from "../Context/Typestate";
 
 const Home = () => {
   const url = "https://api.themoviedb.org/3/";
   const [movies, setmovies] = useState([]);
   const [upcomingmovies, setupcomingmovies] = useState([]);
   const [numOfPages, setNumOfPages] = useState();
-  const {page, setPage} =useContext(PageContext);;
+  const { page, setPage } = useContext(PageContext);
+  const { type } = useContext(TypeContext);
 
   const getMovies = async () => {
-    const { data } = await axios.get(`${url}discover/movie`, {
+    const { data } = await axios.get(`${url}discover/${type}`, {
       params: {
         api_key: process.env.REACT_APP_API_KEY,
         language: "hi-IN|mr-IN",
@@ -58,7 +47,7 @@ const Home = () => {
 
   useEffect(() => {
     getMovies();
-  }, [page]);
+  }, [page, type]);
 
   useEffect(() => {
     getUpcomignMovies();
@@ -67,27 +56,17 @@ const Home = () => {
     <>
       <Header />
       <Container sx={{ marginTop: "15px", marginBottom: "15px" }}>
+        <CustomTabs />
         {upcomingmovies.length > 0 && (
           <Curousel upcomingmovies={upcomingmovies} />
         )}
-        {movies.length > 0 && (
-          <MainContainer>
-            {movies.map((movie) => (
-              <MovieWidget
-                key={movie.id}
-                title={movie.title}
-                poster_path={movie.poster_path}
-                original_language={
-                  movie.original_language === "mr" ? "Marathi" : "Hindi"
-                }
-                release_date={movie.release_date}
-                id={movie.id}
-              />
-            ))}
-          </MainContainer>
-        )}
+        {movies.length > 0 && <MovieTable movies={movies} />}
         {numOfPages > 1 && (
-          <CustomPagination setPage={setPage} numOfPages={numOfPages}page={page} />
+          <CustomPagination
+            setPage={setPage}
+            numOfPages={numOfPages}
+            page={page}
+          />
         )}
       </Container>
     </>

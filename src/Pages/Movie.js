@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../Components/Header/Header";
 import MovieDatils from "../Components/MovieDatils";
+import Player from "../Components/Player";
 
 const Movie = () => {
   const { id } = useParams();
@@ -35,6 +36,7 @@ const Movie = () => {
         <>
           <Header title={movie?.title} isMovie />
           <Container>
+            {/* <Player id="xaYJgKiIH0Q"/> */}
             <MovieDatils
               poster_path={movie?.poster_path}
               title={movie?.title}

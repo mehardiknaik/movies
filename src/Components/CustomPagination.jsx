@@ -2,9 +2,9 @@ import React from "react";
 import Pagination from "@mui/material/Pagination";
 
 const CustomPagination = ({ setPage, numOfPages = 10, page }) => {
-  const handlePageChange = (page) => {
-    setPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+  const handlePageChange = (event, value) => {
+    setPage(value);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
   return (
     <div
@@ -16,12 +16,12 @@ const CustomPagination = ({ setPage, numOfPages = 10, page }) => {
       }}
     >
       <Pagination
-        onChange={(e) => handlePageChange(e.target.textContent)}
+        onChange={handlePageChange}
         count={numOfPages}
         color="secondary"
         hideNextButton
         hidePrevButton
-        defaultPage={page | 1}
+        page={page}
       />
     </div>
   );

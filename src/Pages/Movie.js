@@ -11,7 +11,7 @@ const Movie = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState();
   const url = "https://api.themoviedb.org/3/";
-  const { type} = useContext(TypeContext);
+  const { type } = useContext(TypeContext);
   const getMovie = async () => {
     await axios
       .get(`${url}${type}/${id}`, {

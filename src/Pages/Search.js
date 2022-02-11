@@ -50,7 +50,7 @@ const Search = () => {
 
   return (
     <>
-      <Container sx={{ marginTop: "15px", marginBottom: "15px" }}>
+      <Container sx={{ marginBottom: "15px" }}>
         <CustomTabs page={page} setPage={setPage} />
         <ImageContainer>
           <img width={"50%"} src={searchbg} alt="searchbg" />

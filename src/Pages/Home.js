@@ -54,11 +54,12 @@ const Home = () => {
   }, [type]);
   return (
     <>
-      <Container sx={{ marginTop: "15px", marginBottom: "15px" }}>
-        <CustomTabs page={page} setPage={setPage}/>
+      <Container sx={{ marginBottom: "15px" }}>
+        <CustomTabs page={page} setPage={setPage} />
         {upcomingmovies.length > 0 && (
-          <div data-aos="fade-down"><Curousel upcomingmovies={upcomingmovies} /></div>
-          
+          <div data-aos="fade-down">
+            <Curousel upcomingmovies={upcomingmovies} />
+          </div>
         )}
         {movies.length > 0 && <MovieTable movies={movies} />}
         {numOfPages > 1 && (

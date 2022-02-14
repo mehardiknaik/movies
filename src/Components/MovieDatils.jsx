@@ -40,12 +40,12 @@ const SubTitleContainer = styled.div`
 const ButtonContainer = styled.div`
   margin-top: 20px;
   margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 7px 19px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 7px 39px;
   margin-right: 20px;
   ${breakpoint("sm")`
-  flex-direction: row;
+  grid-template-columns: 1fr 1fr;
   margin-right: 0;
 `}
 `;
@@ -135,7 +135,7 @@ const MovieDatils = ({
         </Widget>
         {overview && (
           <Widget data-aos="fade-up">
-            <div className="title">overview</div>
+            <div className="title">Overview</div>
             <div style={{ margin: "5px 0 5px 26px" }}>{overview}</div>
           </Widget>
         )}

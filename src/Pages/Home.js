@@ -57,7 +57,7 @@ const Home = () => {
       <Container sx={{ marginBottom: "15px" }}>
         <CustomTabs page={page} setPage={setPage} />
         {upcomingmovies.length > 0 && (
-          <div data-aos="fade-down">
+          <div data-aos="fade" data-aos-delay="500">
             <Curousel upcomingmovies={upcomingmovies} />
           </div>
         )}

@@ -103,7 +103,7 @@ const MovieWidget = ({
   //   Getcolor();
   // }, []);
   return (
-    <WidgetContainer data-aos="fade-up">
+    <WidgetContainer data-aos="zoom-in">
       <Link to={`/${id}`}>
         <img src={image} width={"100%"} height={"100%"} alt="" />
         <BottomContainer Colour={Colour}>

@@ -1,20 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Container } from "@mui/material";
-import CustomPagination from "../Components/CustomPagination";
-import Header from "../Components/Header/Header";
 import Curousel from "../Components/Curousel";
 import MovieTable from "../Components/MovieTable";
-import { PageContext } from "../Context/Pagestate";
 import CustomTabs from "../Components/CustomTabs";
 import { TypeContext } from "../Context/Typestate";
-
 const Home = () => {
   const url = "https://api.themoviedb.org/3/";
   const [movies, setmovies] = useState([]);
   const [upcomingmovies, setupcomingmovies] = useState([]);
   const [numOfPages, setNumOfPages] = useState();
-  const { page, setPage } = useContext(PageContext);
+  const [page, setPage] = useState(1);
   const { type } = useContext(TypeContext);
 
   const getMovies = async () => {
@@ -29,8 +25,10 @@ const Home = () => {
       },
     });
     console.log("movies :", data.results);
-    setmovies(data.results);
-    setNumOfPages(data.total_pages);
+    if (page === 1) {
+      setmovies(data.results);
+      setNumOfPages(data.total_pages);
+    } else setmovies((prev) => [...prev, ...data.results]);
   };
 
   const getUpcomignMovies = async () => {
@@ -61,9 +59,9 @@ const Home = () => {
             <Curousel upcomingmovies={upcomingmovies} />
           </div>
         )}
-        {movies.length > 0 && <MovieTable movies={movies} />}
-        {numOfPages > 1 && (
-          <CustomPagination
+        {movies.length > 0 && (
+          <MovieTable
+            movies={movies}
             setPage={setPage}
             numOfPages={numOfPages}
             page={page}

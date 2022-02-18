@@ -1,7 +1,6 @@
 import React from "react";
 import Pagination from "@mui/material/Pagination";
 import { FormControl, MenuItem, Select } from "@mui/material";
-import { FixedSizeList as List } from "react-window";
 
 const CustomPagination = ({ setPage, numOfPages = 10, page }) => {
   const handlePageChange = (event, value) => {

@@ -2,9 +2,7 @@ import { Container, TextField } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
-import CustomPagination from "../Components/CustomPagination";
 import CustomTabs from "../Components/CustomTabs";
-import Header from "../Components/Header/Header";
 import MovieTable from "../Components/MovieTable";
 import { TypeContext } from "../Context/Typestate";
 import searchbg from "../Images/searchbg.png";
@@ -29,7 +27,7 @@ const Search = () => {
   const [movies, setmovies] = useState([]);
   const [page, setPage] = useState(1);
   const { type } = useContext(TypeContext);
-  
+
   const getMovies = async () => {
     const url = "https://api.themoviedb.org/3/";
     if (searchtext.length < 2) {
@@ -44,8 +42,10 @@ const Search = () => {
         page: page,
       },
     });
-    setmovies(data.results);
-    setNumOfPages(data.total_pages);
+    if (page === 1) {
+      setmovies(data.results);
+      setNumOfPages(data.total_pages);
+    } else setmovies((prev) => [...prev, ...data.results]);
   };
 
   const handletextchange = (e) => {
@@ -88,9 +88,9 @@ const Search = () => {
             onChange={(e) => CallFunc(e.target.value)}
           />
         </SearchInputContainer>
-        {movies.length > 0 && <MovieTable movies={movies} />}
-        {movies.length > 0 && numOfPages > 1 && (
-          <CustomPagination
+        {movies.length > 0 && (
+          <MovieTable
+            movies={movies}
             setPage={setPage}
             numOfPages={numOfPages}
             page={page}

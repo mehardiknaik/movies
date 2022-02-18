@@ -1,6 +1,7 @@
 import { Container } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 import Header from "../Components/Header/Header";
 import MovieDatils from "../Components/MovieDatils";
@@ -35,7 +36,11 @@ const Movie = () => {
     <>
       {movie && (
         <>
-          <Container>
+          <Helmet>
+            <meta charSet="utf-8" />
+            <title>{movie?.title || movie?.name}</title>
+          </Helmet>
+          <Container sx={{marginBottom:'20px'}}>
             {/* <Player id="xaYJgKiIH0Q"/> */}
             <MovieDatils
               poster_path={movie?.poster_path}
@@ -46,6 +51,7 @@ const Movie = () => {
               genres={movie?.genres}
               spoken_languages={movie?.spoken_languages}
               overview={movie?.overview}
+              credits={movie?.credits}
             />
           </Container>
         </>

@@ -5,6 +5,7 @@ import back from "../../Images/back.svg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { TypeContext } from "../../Context/Typestate";
 import { useContext } from "react";
+import { Grow } from "@mui/material";
 
 const Header = () => {
   const { pathname } = useLocation();
@@ -22,13 +23,17 @@ const Header = () => {
         )}
         <div className={styles.text}>{type.toUpperCase()}</div>
       </div>
-      {pathname != "/search" && (
+      <Grow
+        in={pathname != "/search"}
+        style={{ transformOrigin: "0 0 0" }}
+        {...(pathname != "/search" ? { timeout: 1000 } : {})}
+      >
         <div>
           <Link to="/search">
             <img src={search} width={25} height={25} alt="" />
           </Link>
         </div>
-      )}
+      </Grow>
     </div>
   );
 };

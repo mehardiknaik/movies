@@ -1,120 +1,100 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { prominent } from "color.js";
+import React, { useEffect, useState } from "react";
 import Noposter from "../Images/Noposter.jpg";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
-import breakpoint from "styled-components-breakpoint";
-const WidgetContainer = styled.div`
-  background: #f4f4f4;
-  border-radius: 10px;
-  box-shadow: 0px 0px 5px black;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
-const BottomContainer = styled.div`
-  height: 50%;
-  position: absolute;
-  width: 100%;
-  text-align: center;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 15px;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0) 10%,
-    rgb(20 20 20) 90%
-  );
-  & .title {
-    color: white;
-    margin-top: 10px;
-    font-size: 14px;
-  }
-  & .subtitle {
-    color: #b6b6b6;
-    font-size: 12px;
-    display: flex;
-    margin-bottom: 9%;
-    margin-left: 10px;
-    margin-right: 10px;
-    justify-content: space-between;
-  }
-`;
+import InfiniteScroll from "react-infinite-scroll-component";
+import {
+  Card,
+  ImageListItem,
+  ImageListItemBar,
+  Box,
+  imageListItemClasses,
+} from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+const theme = createTheme({
+  breakpoints: {
+    values: {
+      mobile: 0,
+      bigMobile: 350,
+      tablet: 650,
+      desktop: 900,
+    },
+  },
+});
 
-const MainContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  ${breakpoint("sm")`
-  grid-template-columns: 1fr 1fr 1fr;
-`}
-  ${breakpoint("lg")`
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-`}
-`;
-
-const MovieTable = ({ movies }) => {
+const MovieTable = ({ movies, numOfPages, setPage, page }) => {
+  const [hasmore, sethasmore] = useState(true);
+  const changepage = () => {
+    setPage((prevCount) => prevCount + 1);
+  };
+  useEffect(() => {
+    if (numOfPages === page) {
+      sethasmore(false);
+    } else sethasmore(true);
+  }, [numOfPages, page]);
   return (
-    <MainContainer>
-      {movies.map((movie) => (
-        <MovieWidget
-          key={movie.id}
-          title={movie.title || movie.name}
-          poster_path={movie.poster_path}
-          original_language={
-            movie.original_language === "mr" ? "Marathi" : "Hindi"
-          }
-          release_date={movie.release_date || movie.first_air_date}
-          id={movie.id}
-        />
-      ))}
-    </MainContainer>
-  );
-};
-
-const MovieWidget = ({
-  title,
-  poster_path,
-  original_language,
-  release_date,
-  id,
-}) => {
-  const [Colour, setColour] = useState();
-  const image = poster_path
-    ? `https://image.tmdb.org/t/p/w300/${poster_path}`
-    : Noposter;
-  // const Getcolor = async () => {
-  //   const color = await prominent(image, {
-  //     amount: 1,
-  //     format: "hex",
-  //   });
-  //   setColour(color);
-  // };
-  // useEffect(() => {
-  //   Getcolor();
-  // }, []);
-  return (
-    <WidgetContainer data-aos="zoom-in">
-      <Link to={`/${id}`}>
-        <img src={image} width={"100%"} height={"100%"} alt="" />
-        <BottomContainer Colour={Colour}>
-          <div className="title">{title}</div>
-          <div className="subtitle">
-            <div>{original_language}</div>
-            <div>{dayjs(release_date).format("D-MMM-YY")}</div>
-          </div>
-        </BottomContainer>
-      </Link>
-    </WidgetContainer>
+    <InfiniteScroll
+      dataLength={movies.length}
+      next={changepage}
+      hasMore={hasmore}
+      loader={
+        <p style={{ textAlign: "center" }}>
+          <b>Loading...</b>
+        </p>
+      }
+      endMessage={
+        <p style={{ textAlign: "center" }}>
+          <b>Yay! You have seen it all</b>
+        </p>
+      }
+    >
+      <ThemeProvider theme={theme}>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              mobile: "repeat(1, 1fr)",
+              bigMobile: "repeat(2, 1fr)",
+              tablet: "repeat(3, 1fr)",
+              desktop: "repeat(5, 1fr)",
+              gap: "20px",
+            },
+            [`& .${imageListItemClasses.root}`]: {
+              display: "flex",
+              flexDirection: "column",
+            },
+          }}
+        >
+          {movies.map((item) => (
+            <Link key={item.id} to={`/${item.id}`}>
+              <ImageListItem component={Card}>
+                <img
+                  src={
+                    item.poster_path
+                      ? `https://image.tmdb.org/t/p/w300/${item.poster_path}`
+                      : Noposter
+                  }
+                  alt={item.title || item.name}
+                  loading="lazy"
+                />
+                <ImageListItemBar
+                  sx={{
+                    background:
+                      "linear-gradient(to top, rgba(0,0,0,0.7) 0%, " +
+                      "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
+                  }}
+                  position="bottom"
+                  title={item.title || item.name}
+                  subtitle={dayjs(
+                    item.release_date || item.first_air_date
+                  ).format("D-MMM-YY")}
+                />
+              </ImageListItem>
+            </Link>
+          ))}
+        </Box>
+      </ThemeProvider>
+    </InfiniteScroll>
   );
 };
 export default MovieTable;

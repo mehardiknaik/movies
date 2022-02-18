@@ -6,6 +6,11 @@ import star from "../Images/star.svg";
 import clock from "../Images/clock.svg";
 import dayjs from "dayjs";
 import breakpoint from "styled-components-breakpoint";
+import AliceCarousel from "react-alice-carousel";
+import noperson from "../Images/noperson.png";
+import { Card, CardContent, Grid, Typography } from "@mui/material";
+import styles from "../styles/Movied.module.css";
+import { motion } from "framer-motion";
 
 const TopContainer = styled.div`
   display: flex;
@@ -29,43 +34,21 @@ const SubTitleContainer = styled.div`
   ${breakpoint("sm")`
   flex-direction: row;
 `}
-  & .subtitle {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    color: #6a6a6a;
-    gap: 10px;
-  }
 `;
-const ButtonContainer = styled.div`
-  margin-top: 20px;
-  margin-bottom: 20px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 7px 39px;
-  margin-right: 20px;
-  ${breakpoint("sm")`
-  grid-template-columns: 1fr 1fr;
-  margin-right: 0;
-`}
-`;
-
-const Widget = styled.div`
-  width: 100%;
-  padding: 10px;
-  border-radius: 4px;
-  box-shadow: rgb(0 0 0 / 20%) 0px 3px 3px -2px,
-    rgb(0 0 0 / 14%) 0px 3px 4px 0px, rgb(0 0 0 / 12%) 0px 1px 8px 0px;
-  & .title {
-    font-size: 20px;
-  }
-`;
-const GenresContainer = styled.div`
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin: 5px 0 5px 26px;
-`;
+const animation = {
+  hidden: {
+    scale: 0,
+    opetacity: 0,
+  },
+  visible: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      duration: 1,
+      ease: "easeInOut",
+    },
+  },
+};
 const MovieDatils = ({
   poster_path,
   title,
@@ -75,10 +58,12 @@ const MovieDatils = ({
   genres,
   spoken_languages,
   overview,
+  credits,
 }) => {
   const image = poster_path
     ? `https://image.tmdb.org/t/p/w300/${poster_path}`
     : Noposter;
+  const { cast, crew } = credits;
 
   return (
     <>
@@ -87,60 +72,193 @@ const MovieDatils = ({
           <img src={image} width={"100%"} height={"100%"} alt="" />
         </div>
         <div data-aos="fade-right">
-          <div>{title}</div>
+          <Typography variant="h5" component="div">
+            {title}
+          </Typography>
           <SubTitleContainer>
-            <div className="subtitle">
+            <div className={styles.Subtitle}>
               <img src={calendar} width={14} height={14} alt="" />
-              <div>{dayjs(release_date).format("D-MMM-YYYY")}</div>
+              <Typography sx={{ mr: 1.5 }} color="text.secondary">
+                {dayjs(release_date).format("D-MMM-YYYY")}
+              </Typography>
             </div>
             {vote_average > 0 && (
-              <div className="subtitle">
+              <div className={styles.Subtitle}>
                 <img src={star} width={14} height={14} alt="" />
-                <div>{vote_average}</div>
+                <Typography sx={{ mr: 1.5 }} color="text.secondary">
+                  {vote_average}
+                </Typography>
               </div>
             )}
             {runtime > 0 && (
-              <div className="subtitle">
+              <div className={styles.Subtitle}>
                 <img src={clock} width={14} height={14} alt="" />
-                <div>{`${parseInt((runtime / 60) % 24)} Hours ${
+                <Typography
+                  sx={{ mr: 1.5 }}
+                  color="text.secondary"
+                >{`${parseInt((runtime / 60) % 24)} Hours ${
                   runtime % 60
-                } Minutes`}</div>
+                } Minutes`}</Typography>
               </div>
             )}
           </SubTitleContainer>
         </div>
       </TopContainer>
-      <ButtonContainer>
-        <Widget data-aos="fade-up">
-          {genres.length > 0 && (
-            <>
-              <div className="title">Genres</div>
-              <GenresContainer>
-                {genres.map((genre) => (
-                  <div key={genre.id}>{genre.name}</div>
-                ))}
-              </GenresContainer>
-            </>
-          )}
-          {spoken_languages.length > 0 && (
-            <>
-              <div className="title">Language</div>
-              <GenresContainer>
-                {spoken_languages.map((language, index) => (
-                  <div key={index}>{language.english_name}</div>
-                ))}
-              </GenresContainer>
-            </>
-          )}
-        </Widget>
+      <Grid container spacing={2}>
+        <Grid item md={6} xs={12}>
+          <motion.div variants={animation} initial="hidden" animate="visible">
+            <Card>
+              {genres.length > 0 && (
+                <CardContent>
+                  <Typography variant="h5" component="div">
+                    Genres
+                  </Typography>
+                  <div className={styles.inRow}>
+                    {genres.map((genre) => (
+                      <Typography
+                        sx={{ mr: 1.5 }}
+                        color="text.secondary"
+                        key={genre.id}
+                      >
+                        {genre.name}
+                      </Typography>
+                    ))}
+                  </div>
+                </CardContent>
+              )}
+              {spoken_languages.length > 0 && (
+                <CardContent>
+                  <Typography variant="h5" component="div">
+                    Language
+                  </Typography>
+                  <div className={styles.inRow}>
+                    {spoken_languages.map((language, index) => (
+                      <Typography
+                        sx={{ mr: 1.5 }}
+                        color="text.secondary"
+                        key={index}
+                      >
+                        {language.english_name}
+                      </Typography>
+                    ))}
+                  </div>
+                </CardContent>
+              )}
+            </Card>
+          </motion.div>
+        </Grid>
         {overview && (
-          <Widget data-aos="fade-up">
-            <div className="title">Overview</div>
-            <div style={{ margin: "5px 0 5px 26px" }}>{overview}</div>
-          </Widget>
+          <Grid item md={6} xs={12}>
+            <motion.div variants={animation} initial="hidden" animate="visible">
+              <Card variant="outlined">
+                <CardContent>
+                  <Typography variant="h5" component="div">
+                    Overview
+                  </Typography>
+                  <Typography color="text.secondary">{overview}</Typography>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </Grid>
         )}
-      </ButtonContainer>
+        {cast.length > 0 && (
+          <Grid item md={6} xs={12}>
+            <Card variant="outlined">
+              <CardContent>
+                <motion.div
+                  variants={animation}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <Typography variant="h5" component="div">
+                    Cast
+                  </Typography>
+                </motion.div>
+                <Curosules data={cast} />
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
+        {crew.length > 0 && (
+          <Grid item md={6} xs={12}>
+            <Card variant="outlined">
+              <CardContent>
+                <motion.div
+                  variants={animation}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <Typography variant="h5" component="div">
+                    Crew
+                  </Typography>
+                </motion.div>
+                <Curosules data={crew} />
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
+      </Grid>
     </>
+  );
+};
+
+const Curosules = ({ data }) => {
+  const handleDragStart = (e) => e.preventDefault();
+  const items = data.map((c) => (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        objectfit: "contain",
+        padding: "10px",
+        textAlign: "center",
+      }}
+    >
+      <img
+        src={
+          c.profile_path
+            ? `https://image.tmdb.org/t/p/w92/${c.profile_path}`
+            : noperson
+        }
+        alt="{c?.name}"
+        onDragStart={handleDragStart}
+        style={{
+          borderRadius: "10px",
+          marginBottom: "5px",
+          boxShadow: "0px 0px 5px black",
+        }}
+      />
+      <Typography variant="h6" component="div">
+        {c?.name}
+      </Typography>
+      <div>
+        {c.job && <Typography color="text.secondary">{c?.job}</Typography>}
+        {c.character && (
+          <Typography color="text.secondary">{c?.character}</Typography>
+        )}
+      </div>
+    </div>
+  ));
+  const responsive = {
+    0: {
+      items: 3,
+    },
+    720: {
+      items: 4,
+    },
+  };
+
+  return (
+    <AliceCarousel
+      mouseTracking
+      infinite
+      disableDotsControls
+      disableButtonsControls
+      responsive={responsive}
+      items={items}
+      autoPlay
+      autoPlayInterval={1500}
+    />
   );
 };
 

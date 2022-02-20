@@ -80,6 +80,7 @@ const Movie = () => {
               {...movie}
               setRgba={setRgba}
               NetworkClick={NetworkClick}
+              trailer={trailer}
             />
           </Container>
         </>

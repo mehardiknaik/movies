@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Noposter from "../Images/Noposter.jpg";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
@@ -11,6 +11,10 @@ import {
   imageListItemClasses,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { TypeContext } from "../Context/Typestate";
+import { motion } from "framer-motion";
+import ColorThief from "colorthief";
+
 const theme = createTheme({
   breakpoints: {
     values: {
@@ -22,8 +26,24 @@ const theme = createTheme({
   },
 });
 
+const animation = {
+  hidden: {
+    scale: 0,
+    opacity: 0,
+  },
+  visible: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      duration: 1,
+      ease: "easeInOut",
+    },
+  },
+};
+
 const MovieTable = ({ movies, numOfPages, setPage, page }) => {
   const [hasmore, sethasmore] = useState(true);
+  const { type } = useContext(TypeContext);
   const changepage = () => {
     setPage((prevCount) => prevCount + 1);
   };
@@ -66,35 +86,43 @@ const MovieTable = ({ movies, numOfPages, setPage, page }) => {
           }}
         >
           {movies.map((item) => (
-            <Link key={item.id} to={`/${item.id}`}>
-              <ImageListItem component={Card}>
-                <img
-                  src={
-                    item.poster_path
-                      ? `https://image.tmdb.org/t/p/w300/${item.poster_path}`
-                      : Noposter
-                  }
-                  alt={item.title || item.name}
-                  loading="lazy"
-                />
-                <ImageListItemBar
-                  sx={{
-                    background:
-                      "linear-gradient(to top, rgba(0,0,0,0.7) 0%, " +
-                      "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
-                  }}
-                  position="bottom"
-                  title={item.title || item.name}
-                  subtitle={dayjs(
-                    item.release_date || item.first_air_date
-                  ).format("D-MMM-YY")}
-                />
-              </ImageListItem>
+            <Link key={item.id} to={`/${type}=${item.id}`}>
+              <MovieItem item={item} />
             </Link>
           ))}
         </Box>
       </ThemeProvider>
     </InfiniteScroll>
+  );
+};
+
+const MovieItem = ({ item }) => {
+  return (
+    <motion.div variants={animation} initial="hidden" animate="visible">
+      <ImageListItem component={Card}>
+        <img
+          src={
+            item.poster_path
+              ? `https://image.tmdb.org/t/p/w300/${item.poster_path}`
+              : Noposter
+          }
+          alt={item.title || item.name}
+          loading="lazy"
+        />
+        <ImageListItemBar
+          sx={{
+            background:
+              "linear-gradient(to top, rgba(0,0,0,0.7) 0%, " +
+              "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
+          }}
+          position="bottom"
+          title={item.title || item.name}
+          subtitle={dayjs(item.release_date || item.first_air_date).format(
+            "D-MMM-YY"
+          )}
+        />
+      </ImageListItem>
+    </motion.div>
   );
 };
 export default MovieTable;

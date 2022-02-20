@@ -9,6 +9,7 @@ body {
   background-color: var(--background);
 
 }
-a{
+a, u {
   text-decoration: none;
+  color: inherit;
 }

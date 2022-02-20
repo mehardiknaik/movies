@@ -1,10 +1,11 @@
-import { color } from "@mui/system";
 import dayjs from "dayjs";
-import React from "react";
+import React, { useContext } from "react";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { TypeContext } from "../Context/Typestate";
+import { motion } from "framer-motion";
 
 const CurouselContainer = styled.div`
   display: flex;
@@ -12,7 +13,7 @@ const CurouselContainer = styled.div`
   object-fit: contain;
   padding: 10px;
   & img {
-    border-radius: 10px;
+    border-radius: 4px;
     margin-bottom: 5px;
     box-shadow: 0px 0px 5px black;
   }
@@ -26,8 +27,8 @@ const TitleContainer = styled.div`
     rgba(255, 255, 255, 0) 10%,
     rgb(20 20 20) 95%
   );
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
   color: white;
   display: flex;
   align-items: flex-start;
@@ -43,13 +44,28 @@ const TitleContainer = styled.div`
     margin-bottom: 10px;
   }
 `;
+const animation = {
+  hidden: {
+    opacity: 0,
+    y: -100,
+  },
+  visible: {
+    opacity: 1,
+    y:0,
+    transition: {
+      duration: 1.3,
+      // ease: "easeInOut",
+    },
+  },
+};
 
 const Curousel = ({ upcomingmovies }) => {
+  const { type } = useContext(TypeContext);
   const items = upcomingmovies
     .filter((c) => (c.backdrop_path ? c : false))
     .map((item, index) => {
       return (
-        <Link to={`/${item.id}`}>
+        <Link to={`/${type}=${item.id}`}>
           <CurouselContainer key={index}>
             <img
               src={`https://image.tmdb.org/t/p/w500/${item.backdrop_path}`}
@@ -78,17 +94,26 @@ const Curousel = ({ upcomingmovies }) => {
   };
 
   return (
-    <AliceCarousel
-      mouseTracking
-      infinite
-      disableButtonsControls
-      items={items}
-      autoPlay
-      disableDotsControls
-      autoPlayInterval={1500}
-      animationDuration={1000}
-      responsive={responsive}
-    />
+    <motion.div
+      variants={animation}
+      initial="hidden"
+      animate="visible"
+      className="imageContainer"
+    >
+      <AliceCarousel
+        mouseTracking
+        infinite
+        disableButtonsControls
+        items={items}
+        autoPlay
+        disableDotsControls
+        autoPlayInterval={1500}
+        animationDuration={1000}
+        responsive={responsive}
+        keyboardNavigation
+        renderSlideInfo={(e) => console.log("slide change", e)}
+      />
+    </motion.div>
   );
 };
 

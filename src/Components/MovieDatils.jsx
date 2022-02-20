@@ -8,9 +8,18 @@ import dayjs from "dayjs";
 import breakpoint from "styled-components-breakpoint";
 import AliceCarousel from "react-alice-carousel";
 import noperson from "../Images/noperson.png";
-import { Card, CardContent, Grid, Typography } from "@mui/material";
-import styles from "../styles/Movied.module.css";
+import {
+  Button,
+  Card,
+  CardContent,
+  Divider,
+  Grid,
+  Stack,
+  Typography,
+} from "@mui/material";
+import styles from "../styles/MovieDatils.module.css";
 import { motion } from "framer-motion";
+import ColorThief from "colorthief";
 
 const TopContainer = styled.div`
   display: flex;
@@ -21,9 +30,14 @@ const TopContainer = styled.div`
     height: auto;
     width: 40%;
     max-width: 200px;
+    min-width: 144px;
     & img {
-      border-radius: 10px;
+      border-radius: 4px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
+  }
+  & .infoContainer {
+    flex: 1;
   }
 `;
 
@@ -38,7 +52,7 @@ const SubTitleContainer = styled.div`
 const animation = {
   hidden: {
     scale: 0,
-    opetacity: 0,
+    opacity: 0,
   },
   visible: {
     scale: 1,
@@ -49,6 +63,28 @@ const animation = {
     },
   },
 };
+const lineAnimation = {
+  hidden: {
+    width: 0,
+  },
+  visible: {
+    width: "100%",
+    transition: {
+      duration: 1.3,
+    },
+  },
+};
+
+const CurosulesContainer = styled.div`
+  padding: 10px;
+  text-align: center;
+  & img {
+    border-radius: 4px;
+    margin-bottom: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+`;
+
 const MovieDatils = ({
   poster_path,
   title,
@@ -59,111 +95,267 @@ const MovieDatils = ({
   spoken_languages,
   overview,
   credits,
+  status,
+  production_companies,
+  homepage,
+  trailer,
+  setRgba,
+  type,
+  networks,
+  seasons,
+  NetworkClick,
+  tagline,
 }) => {
   const image = poster_path
     ? `https://image.tmdb.org/t/p/w300/${poster_path}`
     : Noposter;
   const { cast, crew } = credits;
 
+  const GetBgColour = (e) => {
+    var colorThief = new ColorThief();
+    const gradientData = colorThief.getPalette(e.target, 9);
+    Bgcolour(gradientData);
+  };
+  const Bgcolour = (gradientData) => {
+    const rgb = gradientData.map((el, i) => `rgb(${el})`);
+    setRgba(rgb.join());
+  };
+
   return (
     <>
       <TopContainer>
-        <div data-aos="fade-left" className="imageContainer">
-          <img src={image} width={"100%"} height={"100%"} alt="" />
-        </div>
-        <div data-aos="fade-right">
-          <Typography variant="h5" component="div">
-            {title}
-          </Typography>
-          <SubTitleContainer>
-            <div className={styles.Subtitle}>
-              <img src={calendar} width={14} height={14} alt="" />
-              <Typography sx={{ mr: 1.5 }} color="text.secondary">
-                {dayjs(release_date).format("D-MMM-YYYY")}
+        <motion.div
+          variants={animation}
+          initial="hidden"
+          animate="visible"
+          className="imageContainer"
+        >
+          <img
+            src={image}
+            width={"100%"}
+            height={"100%"}
+            alt=""
+            onLoad={GetBgColour}
+            crossOrigin="Anonymous"
+          />
+        </motion.div>
+        <motion.div
+          variants={animation}
+          initial="hidden"
+          animate="visible"
+          className="infoContainer"
+        >
+          <Card variant="outlined" sx={{ background: "#ffffff38" }}>
+            <CardContent>
+              <Typography variant="h5" component="div">
+                {title}
               </Typography>
-            </div>
-            {vote_average > 0 && (
-              <div className={styles.Subtitle}>
-                <img src={star} width={14} height={14} alt="" />
-                <Typography sx={{ mr: 1.5 }} color="text.secondary">
-                  {vote_average}
-                </Typography>
-              </div>
-            )}
-            {runtime > 0 && (
-              <div className={styles.Subtitle}>
-                <img src={clock} width={14} height={14} alt="" />
-                <Typography
-                  sx={{ mr: 1.5 }}
-                  color="text.secondary"
-                >{`${parseInt((runtime / 60) % 24)} Hours ${
-                  runtime % 60
-                } Minutes`}</Typography>
-              </div>
-            )}
-          </SubTitleContainer>
-        </div>
+              {tagline && (
+                <Typography color="text.secondary">{tagline}</Typography>
+              )}
+              <SubTitleContainer>
+                {type && (
+                  <div className={styles.Subtitle}>
+                    <Typography sx={{ mr: 1.5 }} color="text.secondary">
+                      {type}
+                    </Typography>
+                  </div>
+                )}
+                <div className={styles.Subtitle}>
+                  <img src={calendar} width={14} height={14} alt="" />
+                  <Typography sx={{ mr: 1.5 }} color="text.secondary">
+                    {dayjs(release_date).format("D-MMM-YYYY")}
+                  </Typography>
+                </div>
+                {vote_average > 0 && (
+                  <div className={styles.Subtitle}>
+                    <img src={star} width={14} height={14} alt="" />
+                    <Typography sx={{ mr: 1.5 }} color="text.secondary">
+                      {vote_average}
+                    </Typography>
+                  </div>
+                )}
+                {runtime > 0 && (
+                  <div className={styles.Subtitle}>
+                    <img src={clock} width={14} height={14} alt="" />
+                    <Typography
+                      sx={{ mr: 1.5 }}
+                      color="text.secondary"
+                    >{`${parseInt((runtime / 60) % 24)} Hours ${
+                      runtime % 60
+                    } Minutes`}</Typography>
+                  </div>
+                )}
+              </SubTitleContainer>
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={{ xs: 1, sm: 2, md: 4 }}
+                mt={{ xs: 1, sm: 2, md: 4 }}
+              >
+                {trailer && (
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    target="__blank"
+                    href={`https://www.youtube.com/watch?v=${trailer.key}`}
+                  >
+                    Trailer
+                  </Button>
+                )}
+                {homepage && (
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    href={homepage}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Watch Now
+                  </Button>
+                )}
+              </Stack>
+            </CardContent>
+          </Card>
+        </motion.div>
       </TopContainer>
+      <motion.div variants={lineAnimation} initial="hidden" animate="visible">
+        <Divider variant="middle" sx={{ margin: 1 }} />
+      </motion.div>
+
       <Grid container spacing={2}>
-        <Grid item md={6} xs={12}>
-          <motion.div variants={animation} initial="hidden" animate="visible">
-            <Card>
-              {genres.length > 0 && (
-                <CardContent>
-                  <Typography variant="h5" component="div">
-                    Genres
-                  </Typography>
-                  <div className={styles.inRow}>
-                    {genres.map((genre) => (
-                      <Typography
-                        sx={{ mr: 1.5 }}
-                        color="text.secondary"
-                        key={genre.id}
-                      >
-                        {genre.name}
-                      </Typography>
-                    ))}
-                  </div>
-                </CardContent>
-              )}
-              {spoken_languages.length > 0 && (
-                <CardContent>
-                  <Typography variant="h5" component="div">
-                    Language
-                  </Typography>
-                  <div className={styles.inRow}>
-                    {spoken_languages.map((language, index) => (
-                      <Typography
-                        sx={{ mr: 1.5 }}
-                        color="text.secondary"
-                        key={index}
-                      >
-                        {language.english_name}
-                      </Typography>
-                    ))}
-                  </div>
-                </CardContent>
-              )}
-            </Card>
-          </motion.div>
-        </Grid>
-        {overview && (
-          <Grid item md={6} xs={12}>
+        {
+          <Grid item sm={6} xs={12}>
             <motion.div variants={animation} initial="hidden" animate="visible">
-              <Card variant="outlined">
+              <Card variant="outlined" sx={{ background: "#ffffff38" }}>
+                <CardContent>
+                  {status && (
+                    <>
+                      <Typography variant="h5" component="div">
+                        Status
+                      </Typography>
+                      <Typography color="text.secondary">{status}</Typography>
+                    </>
+                  )}
+                  {genres?.length > 0 && (
+                    <>
+                      <Typography variant="h5" component="div">
+                        Genres
+                      </Typography>
+                      <div className={styles.inRow}>
+                        {genres.map((genre, index) => (
+                          <Typography color="text.secondary" key={genre.id}>
+                            {genre.name}
+                            {genres.length - 1 !== index && ","}
+                          </Typography>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                  {spoken_languages?.length > 0 && (
+                    <>
+                      <Typography variant="h5" component="div">
+                        Language
+                      </Typography>
+                      <div className={styles.inRow}>
+                        {spoken_languages.map((language, index) => (
+                          <Typography color="text.secondary" key={index}>
+                            {language.english_name}
+                            {spoken_languages.length - 1 !== index && ","}
+                          </Typography>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                  {production_companies?.length > 0 && (
+                    <>
+                      <Typography variant="h5" component="div">
+                        Production Companies
+                      </Typography>
+                      <div className={styles.inRow}>
+                        {production_companies.map((companies, index) => (
+                          <Typography color="text.secondary" key={index}>
+                            {companies.name}
+                            {production_companies.length - 1 !== index && ","}
+                          </Typography>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                  {networks?.length > 0 && (
+                    <>
+                      <Typography variant="h5" component="div">
+                        Watch On
+                      </Typography>
+                      <div className={styles.inRow}>
+                        {networks.map((network, index) => (
+                          <Stack
+                            direction="row"
+                            spacing={1}
+                            key={index}
+                            onClick={() => NetworkClick(network.id)}
+                            sx={{ cursor: "pointer" }}
+                          >
+                            {network.logo_path && (
+                              <img
+                                src={`https://image.tmdb.org/t/p/w92${network.logo_path}`}
+                                alt={network.name}
+                                style={{
+                                  marginRight: "5px",
+                                }}
+                                height={26}
+                              />
+                            )}
+                            <Typography color="text.secondary">
+                              {network.name}
+                              {networks.length - 1 !== index && ","}
+                            </Typography>
+                          </Stack>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.div>
+          </Grid>
+        }
+        {overview && (
+          <Grid item sm={6} xs={12}>
+            <motion.div variants={animation} initial="hidden" animate="visible">
+              <Card variant="outlined" sx={{ background: "#ffffff38" }}>
                 <CardContent>
                   <Typography variant="h5" component="div">
                     Overview
                   </Typography>
-                  <Typography color="text.secondary">{overview}</Typography>
+                  <Typography color="text.secondary" paragraph>
+                    {overview}
+                  </Typography>
                 </CardContent>
               </Card>
             </motion.div>
           </Grid>
         )}
-        {cast.length > 0 && (
-          <Grid item md={6} xs={12}>
-            <Card variant="outlined">
+        {seasons?.length > 0 && (
+          <Grid item sm={6} xs={12}>
+            <Card variant="outlined" sx={{ background: "#ffffff38" }}>
+              <CardContent>
+                <motion.div
+                  variants={animation}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <Typography variant="h5" component="div">
+                    Seasons {seasons[seasons.length - 1].season_number}
+                  </Typography>
+                </motion.div>
+                <SeasonCurosules data={seasons} />
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
+        {cast?.length > 0 && (
+          <Grid item sm={6} xs={12}>
+            <Card variant="outlined" sx={{ background: "#ffffff38" }}>
               <CardContent>
                 <motion.div
                   variants={animation}
@@ -180,8 +372,8 @@ const MovieDatils = ({
           </Grid>
         )}
         {crew.length > 0 && (
-          <Grid item md={6} xs={12}>
-            <Card variant="outlined">
+          <Grid item sm={6} xs={12}>
+            <Card variant="outlined" sx={{ background: "#ffffff38" }}>
               <CardContent>
                 <motion.div
                   variants={animation}
@@ -201,52 +393,51 @@ const MovieDatils = ({
     </>
   );
 };
+const responsive = {
+  0: {
+    items: 1,
+  },
+  269: {
+    items: 2,
+  },
+  375: {
+    items: 3,
+  },
+  900: {
+    items: 4,
+  },
+};
 
 const Curosules = ({ data }) => {
   const handleDragStart = (e) => e.preventDefault();
   const items = data.map((c) => (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        objectfit: "contain",
-        padding: "10px",
-        textAlign: "center",
-      }}
+    <a
+      href={`https://www.google.com/search?q=${c?.name.replace(/\s+/g, "+")}`}
+      target="_blank"
+      rel="noopener noreferrer"
     >
-      <img
-        src={
-          c.profile_path
-            ? `https://image.tmdb.org/t/p/w92/${c.profile_path}`
-            : noperson
-        }
-        alt="{c?.name}"
-        onDragStart={handleDragStart}
-        style={{
-          borderRadius: "10px",
-          marginBottom: "5px",
-          boxShadow: "0px 0px 5px black",
-        }}
-      />
-      <Typography variant="h6" component="div">
-        {c?.name}
-      </Typography>
-      <div>
-        {c.job && <Typography color="text.secondary">{c?.job}</Typography>}
-        {c.character && (
-          <Typography color="text.secondary">{c?.character}</Typography>
-        )}
-      </div>
-    </div>
+      <CurosulesContainer>
+        <img
+          src={
+            c.profile_path
+              ? `https://image.tmdb.org/t/p/w92${c.profile_path}`
+              : noperson
+          }
+          alt={c?.name}
+          onDragStart={handleDragStart}
+        />
+        <Typography variant="h6" component="div">
+          {c?.name}
+        </Typography>
+        <div>
+          {c.job && <Typography color="text.secondary">{c?.job}</Typography>}
+          {c.character && (
+            <Typography color="text.secondary">{c?.character}</Typography>
+          )}
+        </div>
+      </CurosulesContainer>
+    </a>
   ));
-  const responsive = {
-    0: {
-      items: 3,
-    },
-    720: {
-      items: 4,
-    },
-  };
 
   return (
     <AliceCarousel
@@ -256,7 +447,51 @@ const Curosules = ({ data }) => {
       disableButtonsControls
       responsive={responsive}
       items={items}
-      autoPlay
+      autoPlay={items?.length > 2 ? true : false}
+      autoPlayInterval={1500}
+    />
+  );
+};
+
+const SeasonCurosules = ({ data }) => {
+  const handleDragStart = (e) => e.preventDefault();
+  const items = data.map((c) => (
+    <CurosulesContainer>
+      <img
+        src={
+          c.poster_path
+            ? `https://image.tmdb.org/t/p/w92${c.poster_path}`
+            : noperson
+        }
+        alt={c?.name}
+        onDragStart={handleDragStart}
+      />
+      <Typography variant="h6" component="div">
+        {c?.name}
+      </Typography>
+      <div>
+        {c.air_date && (
+          <Typography color="text.secondary">
+            {dayjs(c?.air_date).format("D-MMM-YYYY")}
+          </Typography>
+        )}
+        {c.episode_count && (
+          <Typography color="text.secondary">
+            Episode {c?.episode_count}
+          </Typography>
+        )}
+      </div>
+    </CurosulesContainer>
+  ));
+  return (
+    <AliceCarousel
+      mouseTracking
+      infinite
+      disableDotsControls
+      disableButtonsControls
+      responsive={responsive}
+      items={items}
+      autoPlay={items?.length > 2 ? true : false}
       autoPlayInterval={1500}
     />
   );

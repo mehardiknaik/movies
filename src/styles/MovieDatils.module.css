@@ -4,6 +4,8 @@
 .inRow{
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 10px;
 }
 .Subtitle{
   display: flex;

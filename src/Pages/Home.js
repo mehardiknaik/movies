@@ -24,7 +24,6 @@ const Home = () => {
         "release_date.lte": "2022-12-31",
       },
     });
-    console.log("movies :", data.results);
     if (page === 1) {
       setmovies(data.results);
       setNumOfPages(data.total_pages);
@@ -39,23 +38,23 @@ const Home = () => {
         with_original_language: "hi|mr",
       },
     });
-    console.log("upcoming :", data.results);
     setupcomingmovies(data.results);
   };
+
+  useEffect(() => {
+    getUpcomignMovies();
+  }, [type]);
 
   useEffect(() => {
     getMovies();
   }, [page, type]);
 
-  useEffect(() => {
-    getUpcomignMovies();
-  }, [type]);
   return (
     <>
       <Container sx={{ marginBottom: "15px" }}>
-        <CustomTabs page={page} setPage={setPage} />
+        <CustomTabs setPage={setPage} />
         {upcomingmovies.length > 0 && (
-          <div data-aos="fade" data-aos-delay="500">
+          <div>
             <Curousel upcomingmovies={upcomingmovies} />
           </div>
         )}

@@ -17,7 +17,7 @@ const Header = () => {
         {pathname == "/" ? (
           <img src={logo} width={35} height={35} alt="" />
         ) : (
-          <div onClick={() => navigate(-1)}>
+          <div className={styles.BackButton} onClick={() => navigate(-1)}>
             <img src={back} width={25} height={25} alt="" />
           </div>
         )}

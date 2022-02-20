@@ -1,21 +1,30 @@
 import { Container } from "@mui/material";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
-import Header from "../Components/Header/Header";
+import styled from "styled-components";
 import MovieDatils from "../Components/MovieDatils";
-import Player from "../Components/Player";
-import { TypeContext } from "../Context/Typestate";
 
+const BgContainer = styled.div`
+  height: 100vh;
+  position: fixed;
+  width: 100%;
+  z-index: -1;
+  top: 0;
+  transition: 0.7s;
+`;
 const Movie = () => {
   const { id } = useParams();
+  const type = id.split("=")[0];
+  const code = id.split("=")[1];
   const [movie, setMovie] = useState();
+  const [trailer, setTrailer] = useState();
+  const [rgba, setRgba] = useState("rgb(255 255 255), rgb(216 216 216)");
   const url = "https://api.themoviedb.org/3/";
-  const { type } = useContext(TypeContext);
   const getMovie = async () => {
     await axios
-      .get(`${url}${type}/${id}`, {
+      .get(`${url}${type}/${code}`, {
         params: {
           api_key: process.env.REACT_APP_API_KEY,
           language: "en-US",
@@ -24,7 +33,27 @@ const Movie = () => {
       })
       .then((response) => {
         console.log("data", response.data);
+        Gettrailer(response.data.videos.results);
         setMovie(response.data);
+      })
+      .catch((err) => console.log("Error===", err));
+  };
+  const Gettrailer = (data) => {
+    if (data.length > 0)
+      setTrailer(data.find((item) => item.type === "Trailer"));
+  };
+  const NetworkClick = async (id) => {
+    await axios
+      .get(`${url}network/${id}`, {
+        params: {
+          api_key: process.env.REACT_APP_API_KEY,
+        },
+      })
+      .then((response) => {
+        console.log("data", response);
+        const { data } = response;
+        if(data.homepage)
+        window.open(data.homepage, "_blank");
       })
       .catch((err) => console.log("Error===", err));
   };
@@ -39,8 +68,14 @@ const Movie = () => {
           <Helmet>
             <meta charSet="utf-8" />
             <title>{movie?.title || movie?.name}</title>
+            <meta name="theme-color" content="#84FFC1" />
           </Helmet>
-          <Container sx={{marginBottom:'20px'}}>
+          <BgContainer
+            style={{
+              background: `linear-gradient(45deg, ${rgba})`,
+            }}
+          ></BgContainer>
+          <Container sx={{ marginBottom: "20px" }}>
             {/* <Player id="xaYJgKiIH0Q"/> */}
             <MovieDatils
               poster_path={movie?.poster_path}
@@ -52,6 +87,16 @@ const Movie = () => {
               spoken_languages={movie?.spoken_languages}
               overview={movie?.overview}
               credits={movie?.credits}
+              status={movie?.status}
+              production_companies={movie?.production_companies}
+              homepage={movie?.homepage}
+              trailer={trailer}
+              setRgba={setRgba}
+              type={movie?.type}
+              networks={movie?.networks}
+              seasons={movie?.seasons}
+              tagline={movie?.tagline}
+              NetworkClick={NetworkClick}
             />
           </Container>
         </>

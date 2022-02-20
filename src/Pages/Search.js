@@ -1,6 +1,7 @@
 import { Container, TextField } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState, useCallback } from "react";
+import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import CustomTabs from "../Components/CustomTabs";
 import MovieTable from "../Components/MovieTable";
@@ -72,8 +73,12 @@ const Search = () => {
 
   return (
     <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Search</title>
+      </Helmet>
       <Container sx={{ marginBottom: "15px" }}>
-        <CustomTabs page={page} setPage={setPage} />
+        <CustomTabs setPage={setPage} />
         <ImageContainer>
           <img width={"50%"} src={searchbg} alt="searchbg" />
         </ImageContainer>

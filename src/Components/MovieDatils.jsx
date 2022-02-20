@@ -61,6 +61,7 @@ const animation = {
     transition: {
       duration: 1,
       ease: "easeInOut",
+      staggerChildren: 10,
     },
   },
 };
@@ -160,10 +161,7 @@ const MovieDatils = ({
             crossOrigin="Anonymous"
           />
         </motion.div>
-        <motion.div
-          variants={animation}
-          initial="hidden"
-          animate="visible"
+        <div
           className="infoContainer"
         >
           <Card variant="outlined" sx={{ background: "#ffffff38" }}>
@@ -244,7 +242,7 @@ const MovieDatils = ({
               </Stack>
             </CardContent>
           </Card>
-        </motion.div>
+        </div>
       </TopContainer>
       <motion.div variants={lineAnimation} initial="hidden" animate="visible">
         <Divider variant="middle" sx={{ margin: 1 }} />

@@ -33,7 +33,8 @@ const TopContainer = styled.div`
     min-width: 144px;
     & img {
       border-radius: 4px;
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+        0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
   }
   & .infoContainer {
@@ -74,6 +75,25 @@ const lineAnimation = {
     },
   },
 };
+const titleAnimationContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+const titleAnimation = {
+  hidden: {
+    y: -200,
+  },
+  visible: {
+    y: 0,
+    transition: {
+      duration: 0.6,
+    },
+  },
+};
 
 const CurosulesContainer = styled.div`
   padding: 10px;
@@ -87,6 +107,7 @@ const CurosulesContainer = styled.div`
 
 const MovieDatils = ({
   poster_path,
+  name,
   title,
   release_date,
   vote_average,
@@ -147,8 +168,15 @@ const MovieDatils = ({
         >
           <Card variant="outlined" sx={{ background: "#ffffff38" }}>
             <CardContent>
-              <Typography variant="h5" component="div">
-                {title}
+            <Typography variant="h5" component="div">
+              <motion.div
+                variants={titleAnimationContainer}
+                initial="hidden"
+                animate="visible"
+                style={{ display: "flex", flexWrap: "wrap" }}
+              >
+                <Title title={title ? [...title] : [...name]} />
+              </motion.div>
               </Typography>
               {tagline && (
                 <Typography color="text.secondary">{tagline}</Typography>
@@ -495,6 +523,14 @@ const SeasonCurosules = ({ data }) => {
       autoPlayInterval={1500}
     />
   );
+};
+
+const Title = ({ title }) => {
+  return title.map((t, index) => (
+    <motion.div variants={titleAnimation} key={index}>
+        {t == " " ? "\u00A0" : t}
+    </motion.div>
+  ));
 };
 
 export default MovieDatils;

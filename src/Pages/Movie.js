@@ -52,8 +52,7 @@ const Movie = () => {
       .then((response) => {
         console.log("data", response);
         const { data } = response;
-        if(data.homepage)
-        window.open(data.homepage, "_blank");
+        if (data.homepage) window.open(data.homepage, "_blank");
       })
       .catch((err) => console.log("Error===", err));
   };
@@ -78,24 +77,8 @@ const Movie = () => {
           <Container sx={{ marginBottom: "20px" }}>
             {/* <Player id="xaYJgKiIH0Q"/> */}
             <MovieDatils
-              poster_path={movie?.poster_path}
-              title={movie?.title || movie?.name}
-              release_date={movie?.release_date || movie?.first_air_date}
-              vote_average={movie?.vote_average}
-              runtime={movie?.runtime}
-              genres={movie?.genres}
-              spoken_languages={movie?.spoken_languages}
-              overview={movie?.overview}
-              credits={movie?.credits}
-              status={movie?.status}
-              production_companies={movie?.production_companies}
-              homepage={movie?.homepage}
-              trailer={trailer}
+              {...movie}
               setRgba={setRgba}
-              type={movie?.type}
-              networks={movie?.networks}
-              seasons={movie?.seasons}
-              tagline={movie?.tagline}
               NetworkClick={NetworkClick}
             />
           </Container>

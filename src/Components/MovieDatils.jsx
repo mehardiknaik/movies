@@ -135,7 +135,7 @@ const MovieDatils = ({
 
   const GetBgColour = (e) => {
     var colorThief = new ColorThief();
-    const gradientData = colorThief.getPalette(e.target, 9);
+    const gradientData = colorThief.getPalette(e.target);
     Bgcolour(gradientData);
   };
   const Bgcolour = (gradientData) => {

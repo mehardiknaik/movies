@@ -1,7 +1,7 @@
 import { Container, TextField } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState, useCallback } from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import CustomTabs from "../Components/CustomTabs";
 import MovieTable from "../Components/MovieTable";

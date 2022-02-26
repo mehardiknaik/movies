@@ -65,6 +65,20 @@ const animation = {
     },
   },
 };
+const IMGanimation = {
+  hidden: {
+    scale: 1.2,
+    opacity: 0,
+  },
+  visible: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      duration: 1,
+      ease: "easeInOut",
+    },
+  },
+};
 const lineAnimation = {
   hidden: {
     width: 0,
@@ -127,6 +141,8 @@ const MovieDatils = ({
   seasons,
   NetworkClick,
   tagline,
+  episode_run_time,
+  number_of_episodes,
 }) => {
   const image = poster_path
     ? `https://image.tmdb.org/t/p/w300/${poster_path}`
@@ -135,7 +151,7 @@ const MovieDatils = ({
 
   const GetBgColour = (e) => {
     var colorThief = new ColorThief();
-    const gradientData = colorThief.getPalette(e.target);//Add number to get more colors default 10
+    const gradientData = colorThief.getPalette(e.target); //Add number to get more colors default 10
     Bgcolour(gradientData);
   };
   const Bgcolour = (gradientData) => {
@@ -147,7 +163,7 @@ const MovieDatils = ({
     <>
       <TopContainer>
         <motion.div
-          variants={animation}
+          variants={IMGanimation}
           initial="hidden"
           animate="visible"
           className="imageContainer"
@@ -161,20 +177,18 @@ const MovieDatils = ({
             crossOrigin="Anonymous"
           />
         </motion.div>
-        <div
-          className="infoContainer"
-        >
+        <div className="infoContainer">
           <Card variant="outlined" sx={{ background: "#ffffff38" }}>
             <CardContent>
-            <Typography variant="h5" component="div">
-              <motion.div
-                variants={titleAnimationContainer}
-                initial="hidden"
-                animate="visible"
-                style={{ display: "flex", flexWrap: "wrap" }}
-              >
-                <Title title={title ? [...title] : [...name]} />
-              </motion.div>
+              <Typography variant="h5" component="div">
+                <motion.div
+                  variants={titleAnimationContainer}
+                  initial="hidden"
+                  animate="visible"
+                  style={{ display: "flex", flexWrap: "wrap" }}
+                >
+                  <Title title={title ? [...title] : [...name]} />
+                </motion.div>
               </Typography>
               {tagline && (
                 <Typography color="text.secondary">{tagline}</Typography>
@@ -370,6 +384,32 @@ const MovieDatils = ({
                   initial="hidden"
                   animate="visible"
                 >
+                  {number_of_episodes && (
+                    <>
+                      <Typography variant="h5" component="div">
+                        Total Episodes
+                      </Typography>
+                      <Typography color="text.secondary" paragraph>
+                        {number_of_episodes} Episodes
+                      </Typography>
+                    </>
+                  )}
+                  {episode_run_time.length > 0 && (
+                    <>
+                      <Typography variant="h5" component="div">
+                        Runtime
+                      </Typography>
+                      <Typography color="text.secondary" paragraph>
+                        {episode_run_time[0]} Minutes per episode
+                      </Typography>
+                    </>
+                  )}
+                </motion.div>
+                <motion.div
+                  variants={animation}
+                  initial="hidden"
+                  animate="visible"
+                >
                   <Typography variant="h5" component="div">
                     Seasons {seasons[seasons.length - 1].season_number}
                   </Typography>
@@ -526,7 +566,7 @@ const SeasonCurosules = ({ data }) => {
 const Title = ({ title }) => {
   return title.map((t, index) => (
     <motion.div variants={titleAnimation} key={index}>
-        {t == " " ? "\u00A0" : t}
+      {t == " " ? "\u00A0" : t}
     </motion.div>
   ));
 };

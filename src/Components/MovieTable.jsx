@@ -76,7 +76,7 @@ const MovieTable = ({ movies, numOfPages, setPage, page }) => {
       }
     >
       <ThemeProvider theme={theme}>
-        <motion.div variants={mainAnimation} initial="hidden" animate="visible">
+        <motion.div layout>
           <Box
             sx={{
               display: "grid",
@@ -94,7 +94,7 @@ const MovieTable = ({ movies, numOfPages, setPage, page }) => {
             }}
           >
             {movies.map((item) => (
-              <motion.div key={item.id} variants={animation}>
+              <motion.div key={item.id} layout>
                 <Link to={`/${type}=${item.id}`}>
                   <MovieItem {...item} />
                 </Link>

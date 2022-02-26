@@ -81,9 +81,8 @@ const Genres = ({ selectedGenres, setselectedGenres, setPage }) => {
               <Chip
                 style={{ margin: 2 }}
                 label={genre.name}
-                color="primary"
+                color="secondary"
                 clickable
-                size="small"
                 onDelete={() => handleRemove(genre)}
               />
             </motion.div>
@@ -96,7 +95,7 @@ const Genres = ({ selectedGenres, setselectedGenres, setPage }) => {
                     style={{ margin: 2 }}
                     label={genre.name}
                     clickable
-                    size="small"
+                    variant="outlined"
                     onClick={() => handleAdd(genre)}
                   />
                 </motion.div>

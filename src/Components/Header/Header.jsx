@@ -31,7 +31,7 @@ const Header = () => {
       }}
     >
       <div className={styles.leftContainer}>
-        {pathname == "/" ? (
+        {pathname === "/" ? (
           <img src={logo} width={35} height={35} alt="" />
         ) : (
           <div className={styles.BackButton} onClick={() => navigate(-1)}>

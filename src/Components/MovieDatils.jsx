@@ -193,7 +193,7 @@ const MovieDatils = ({
             src={image}
             width={"100%"}
             height={"100%"}
-            alt=""
+            alt={title||name}
             onLoad={GetBgColour}
             crossOrigin="Anonymous"
           />
@@ -596,7 +596,7 @@ const SeasonCurosules = ({ data }) => {
 const Title = ({ title }) => {
   return title.map((t, index) => (
     <motion.div variants={titleAnimation} key={index}>
-      {t == " " ? "\u00A0" : t}
+      {t === " " ? "\u00A0" : t}
     </motion.div>
   ));
 };

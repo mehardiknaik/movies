@@ -15,6 +15,7 @@ const BgContainer = styled.div`
     position: absolute;
   }
 `;
+
 const IMGanimation = {
   hidden: {
     scale: 1.2,
@@ -35,12 +36,13 @@ const IMGanimation = {
     },
   },
 };
+
 const MovieDetailBg = ({ backdrop_path, rgba }) => {
   const { background } = useContext(BackgroundContext);
-  const [AnimateBg, setAnimateBg] = useState(background);
+  const [AnimateBg, setAnimateBg] = useState(false);
 
   useEffect(() => {
-    setAnimateBg((bg) => !bg);
+    if (AnimateBg) setAnimateBg(false);
   }, [background]);
 
   return (
@@ -50,7 +52,7 @@ const MovieDetailBg = ({ backdrop_path, rgba }) => {
           <motion.div
             variants={IMGanimation}
             initial="hidden"
-            animate={AnimateBg ? "visible" : "exit"}
+            animate={AnimateBg ? "visible" : ""}
             exit="exit"
           >
             <img

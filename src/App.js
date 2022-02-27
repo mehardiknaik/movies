@@ -7,17 +7,20 @@ import Search from "./Pages/Search";
 import Typestate from "./Context/Typestate";
 import Header from "./Components/Header/Header";
 import { HelmetProvider } from "react-helmet-async";
+import BackgroundState from "./Context/BackgroundState";
 function App() {
   return (
     <HelmetProvider>
       <Typestate>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/:id" element={<Movie />} />
-        </Routes>
-        <Footer />
+        <BackgroundState>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/:id" element={<Movie />} />
+          </Routes>
+          <Footer />
+        </BackgroundState>
       </Typestate>
     </HelmetProvider>
   );

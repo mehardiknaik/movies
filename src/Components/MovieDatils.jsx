@@ -50,18 +50,39 @@ const SubTitleContainer = styled.div`
   flex-direction: row;
 `}
 `;
-const animation = {
+const BottomContainerAnimation = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.5,
+    },
+  },
+};
+const Leftanimation = {
   hidden: {
-    scale: 0,
+    x: "-100%",
     opacity: 0,
   },
   visible: {
-    scale: 1,
+    x: 0,
     opacity: 1,
     transition: {
       duration: 1,
       ease: "easeInOut",
-      staggerChildren: 10,
+    },
+  },
+};
+const Rightanimation = {
+  hidden: {
+    x: "100%",
+    opacity: 0,
+  },
+  visible: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      duration: 1,
+      ease: "easeInOut",
     },
   },
 };
@@ -155,7 +176,7 @@ const MovieDatils = ({
     Bgcolour(gradientData);
   };
   const Bgcolour = (gradientData) => {
-    const rgb = gradientData.map((el, i) => `rgb(${el})`);
+    const rgb = gradientData.map((el, i) => `rgb(${el},${100 - i * 7}%)`);
     setRgba(rgb.join());
   };
 
@@ -262,194 +283,203 @@ const MovieDatils = ({
         <Divider variant="middle" sx={{ margin: 1 }} />
       </motion.div>
 
-      <Grid container spacing={2}>
+      <Grid
+        container
+        spacing={2}
+        component={motion.div}
+        variants={BottomContainerAnimation}
+        initial="hidden"
+        animate="visible"
+      >
         {
-          <Grid item sm={6} xs={12}>
-            <motion.div variants={animation} initial="hidden" animate="visible">
-              <Card variant="outlined" sx={{ background: "#ffffff38" }}>
-                <CardContent>
-                  {status && (
-                    <>
-                      <Typography variant="h5" component="div">
-                        Status
-                      </Typography>
-                      <Typography color="text.secondary">{status}</Typography>
-                    </>
-                  )}
-                  {genres?.length > 0 && (
-                    <>
-                      <Typography variant="h5" component="div">
-                        Genres
-                      </Typography>
-                      <div className={styles.inRow}>
-                        {genres.map((genre, index) => (
-                          <Typography color="text.secondary" key={genre.id}>
-                            {genre.name}
-                            {genres.length - 1 !== index && ","}
+          <Grid
+            item
+            sm={6}
+            xs={12}
+            component={motion.div}
+            variants={Leftanimation}
+          >
+            <Card variant="outlined" sx={{ background: "#ffffff38" }}>
+              <CardContent>
+                {status && (
+                  <>
+                    <Typography variant="h5" component="div">
+                      Status
+                    </Typography>
+                    <Typography color="text.secondary">{status}</Typography>
+                  </>
+                )}
+                {genres?.length > 0 && (
+                  <>
+                    <Typography variant="h5" component="div">
+                      Genres
+                    </Typography>
+                    <div className={styles.inRow}>
+                      {genres.map((genre, index) => (
+                        <Typography color="text.secondary" key={genre.id}>
+                          {genre.name}
+                          {genres.length - 1 !== index && ","}
+                        </Typography>
+                      ))}
+                    </div>
+                  </>
+                )}
+                {spoken_languages?.length > 0 && (
+                  <>
+                    <Typography variant="h5" component="div">
+                      Language
+                    </Typography>
+                    <div className={styles.inRow}>
+                      {spoken_languages.map((language, index) => (
+                        <Typography color="text.secondary" key={index}>
+                          {language.english_name}
+                          {spoken_languages.length - 1 !== index && ","}
+                        </Typography>
+                      ))}
+                    </div>
+                  </>
+                )}
+                {production_companies?.length > 0 && (
+                  <>
+                    <Typography variant="h5" component="div">
+                      Production Companies
+                    </Typography>
+                    <div className={styles.inRow}>
+                      {production_companies.map((companies, index) => (
+                        <Typography color="text.secondary" key={index}>
+                          {companies.name}
+                          {production_companies.length - 1 !== index && ","}
+                        </Typography>
+                      ))}
+                    </div>
+                  </>
+                )}
+                {networks?.length > 0 && (
+                  <>
+                    <Typography variant="h5" component="div">
+                      Watch On
+                    </Typography>
+                    <div className={styles.inRow}>
+                      {networks.map((network, index) => (
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          key={index}
+                          onClick={() => NetworkClick(network.id)}
+                          sx={{ cursor: "pointer" }}
+                        >
+                          {network.logo_path && (
+                            <img
+                              src={`https://image.tmdb.org/t/p/w92${network.logo_path}`}
+                              alt={network.name}
+                              style={{
+                                marginRight: "5px",
+                              }}
+                              height={26}
+                            />
+                          )}
+                          <Typography color="text.secondary">
+                            {network.name}
+                            {networks.length - 1 !== index && ","}
                           </Typography>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                  {spoken_languages?.length > 0 && (
-                    <>
-                      <Typography variant="h5" component="div">
-                        Language
-                      </Typography>
-                      <div className={styles.inRow}>
-                        {spoken_languages.map((language, index) => (
-                          <Typography color="text.secondary" key={index}>
-                            {language.english_name}
-                            {spoken_languages.length - 1 !== index && ","}
-                          </Typography>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                  {production_companies?.length > 0 && (
-                    <>
-                      <Typography variant="h5" component="div">
-                        Production Companies
-                      </Typography>
-                      <div className={styles.inRow}>
-                        {production_companies.map((companies, index) => (
-                          <Typography color="text.secondary" key={index}>
-                            {companies.name}
-                            {production_companies.length - 1 !== index && ","}
-                          </Typography>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                  {networks?.length > 0 && (
-                    <>
-                      <Typography variant="h5" component="div">
-                        Watch On
-                      </Typography>
-                      <div className={styles.inRow}>
-                        {networks.map((network, index) => (
-                          <Stack
-                            direction="row"
-                            spacing={1}
-                            key={index}
-                            onClick={() => NetworkClick(network.id)}
-                            sx={{ cursor: "pointer" }}
-                          >
-                            {network.logo_path && (
-                              <img
-                                src={`https://image.tmdb.org/t/p/w92${network.logo_path}`}
-                                alt={network.name}
-                                style={{
-                                  marginRight: "5px",
-                                }}
-                                height={26}
-                              />
-                            )}
-                            <Typography color="text.secondary">
-                              {network.name}
-                              {networks.length - 1 !== index && ","}
-                            </Typography>
-                          </Stack>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.div>
+                        </Stack>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </CardContent>
+            </Card>
           </Grid>
         }
         {overview && (
-          <Grid item sm={6} xs={12}>
-            <motion.div variants={animation} initial="hidden" animate="visible">
-              <Card variant="outlined" sx={{ background: "#ffffff38" }}>
-                <CardContent>
-                  <Typography variant="h5" component="div">
-                    Overview
-                  </Typography>
-                  <Typography color="text.secondary" paragraph>
-                    {overview}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </motion.div>
+          <Grid
+            item
+            sm={6}
+            xs={12}
+            component={motion.div}
+            variants={Rightanimation}
+          >
+            <Card variant="outlined" sx={{ background: "#ffffff38" }}>
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  Overview
+                </Typography>
+                <Typography color="text.secondary" paragraph>
+                  {overview}
+                </Typography>
+              </CardContent>
+            </Card>
           </Grid>
         )}
         {seasons?.length > 0 && (
-          <Grid item sm={6} xs={12}>
+          <Grid
+            item
+            sm={6}
+            xs={12}
+            component={motion.div}
+            variants={Leftanimation}
+          >
             <Card variant="outlined" sx={{ background: "#ffffff38" }}>
               <CardContent>
-                <motion.div
-                  variants={animation}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  {number_of_episodes && (
-                    <>
-                      <Typography variant="h5" component="div">
-                        Total Episodes
-                      </Typography>
-                      <Typography color="text.secondary" paragraph>
-                        {number_of_episodes} Episodes
-                      </Typography>
-                    </>
-                  )}
-                  {episode_run_time.length > 0 && (
-                    <>
-                      <Typography variant="h5" component="div">
-                        Runtime
-                      </Typography>
-                      <Typography color="text.secondary" paragraph>
-                        {episode_run_time[0]} Minutes per episode
-                      </Typography>
-                    </>
-                  )}
-                </motion.div>
-                <motion.div
-                  variants={animation}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  <Typography variant="h5" component="div">
-                    Seasons {seasons[seasons.length - 1].season_number}
-                  </Typography>
-                </motion.div>
+                {number_of_episodes && (
+                  <>
+                    <Typography variant="h5" component="div">
+                      Total Episodes
+                    </Typography>
+                    <Typography color="text.secondary" paragraph>
+                      {number_of_episodes} Episodes
+                    </Typography>
+                  </>
+                )}
+                {episode_run_time.length > 0 && (
+                  <>
+                    <Typography variant="h5" component="div">
+                      Runtime
+                    </Typography>
+                    <Typography color="text.secondary" paragraph>
+                      {episode_run_time[0]} Minutes per episode
+                    </Typography>
+                  </>
+                )}
+                <Typography variant="h5" component="div">
+                  Seasons {seasons[seasons.length - 1].season_number}
+                </Typography>
                 <SeasonCurosules data={seasons} />
               </CardContent>
             </Card>
           </Grid>
         )}
         {cast?.length > 0 && (
-          <Grid item sm={6} xs={12}>
+          <Grid
+            item
+            sm={6}
+            xs={12}
+            component={motion.div}
+            variants={seasons?.length > 0 ? Rightanimation : Leftanimation}
+          >
             <Card variant="outlined" sx={{ background: "#ffffff38" }}>
               <CardContent>
-                <motion.div
-                  variants={animation}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  <Typography variant="h5" component="div">
-                    Cast
-                  </Typography>
-                </motion.div>
+                <Typography variant="h5" component="div">
+                  Cast
+                </Typography>
                 <Curosules data={cast} />
               </CardContent>
             </Card>
           </Grid>
         )}
         {crew.length > 0 && (
-          <Grid item sm={6} xs={12}>
+          <Grid
+            item
+            sm={6}
+            xs={12}
+            component={motion.div}
+            variants={seasons?.length > 0 ? Leftanimation : Rightanimation}
+          >
             <Card variant="outlined" sx={{ background: "#ffffff38" }}>
               <CardContent>
-                <motion.div
-                  variants={animation}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  <Typography variant="h5" component="div">
-                    Crew
-                  </Typography>
-                </motion.div>
+                <Typography variant="h5" component="div">
+                  Crew
+                </Typography>
                 <Curosules data={crew} />
               </CardContent>
             </Card>

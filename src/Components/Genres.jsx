@@ -77,7 +77,7 @@ const Genres = ({ selectedGenres, setselectedGenres, setPage }) => {
           animate="visible"
         >
           {selectedGenres.map((genre) => (
-            <motion.div variants={gendreAnimation} key={genre.id}>
+            <motion.div variants={gendreAnimation} key={genre.id} layout>
               <Chip
                 style={{ margin: 2 }}
                 label={genre.name}
@@ -90,7 +90,7 @@ const Genres = ({ selectedGenres, setselectedGenres, setPage }) => {
           {genres.map((genre) => {
             if (!selectedGenres.some((a) => a.id === genre.id)) {
               return (
-                <motion.div variants={gendreAnimation} key={genre.id}>
+                <motion.div variants={gendreAnimation} key={genre.id} layout>
                   <Chip
                     style={{ margin: 2 }}
                     label={genre.name}

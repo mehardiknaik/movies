@@ -1,19 +1,11 @@
 import { Container } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
-import styled from "styled-components";
 import MovieDatils from "../Components/MovieDatils";
+import MovieDetailBg from "../Components/MovieDetailBg";
 
-const BgContainer = styled.div`
-  height: 100vh;
-  position: fixed;
-  width: 100%;
-  z-index: -1;
-  top: 0;
-  transition: 0.7s;
-`;
 const Movie = () => {
   const { id } = useParams();
   const type = id.split("=")[0];
@@ -21,6 +13,7 @@ const Movie = () => {
   const [movie, setMovie] = useState();
   const [trailer, setTrailer] = useState();
   const [rgba, setRgba] = useState("rgb(255 255 255), rgb(216 216 216)");
+
   const url = "https://api.themoviedb.org/3/";
   const getMovie = async () => {
     await axios
@@ -63,17 +56,13 @@ const Movie = () => {
   return (
     <>
       {movie && (
-        <>
+        <div style={{ overflow: "hidden" }}>
           <Helmet>
             <meta charSet="utf-8" />
             <title>{movie?.title || movie?.name}</title>
             <meta name="theme-color" content="#84FFC1" />
           </Helmet>
-          <BgContainer
-            style={{
-              background: `linear-gradient(45deg, ${rgba})`,
-            }}
-          ></BgContainer>
+          <MovieDetailBg rgba={rgba} backdrop_path={movie?.backdrop_path} />
           <Container sx={{ marginBottom: "20px" }}>
             {/* <Player id="xaYJgKiIH0Q"/> */}
             <MovieDatils
@@ -83,7 +72,7 @@ const Movie = () => {
               trailer={trailer}
             />
           </Container>
-        </>
+        </div>
       )}
     </>
   );

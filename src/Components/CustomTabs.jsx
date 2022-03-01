@@ -19,7 +19,7 @@ const CustomTabs = ({ setPage,setselectedGenres}) => {
       onChange={(event, newValue) => {
         changeTab(newValue);
       }}
-      style={{ paddingBottom: 5 }}
+      style={{ paddingBottom: 5, flex:1}}
       aria-label="disabled tabs example"
     >
       <Tab style={{ width: "50%" }} value="movie" label="Movies" />

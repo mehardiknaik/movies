@@ -7,17 +7,14 @@ import CustomTabs from "../Components/CustomTabs";
 import { TypeContext } from "../Context/Typestate";
 import Genres from "../Components/Genres";
 import LanguageSelect from "../Components/LanguageSelect";
-import { Languages } from "../Data/Language";
+import { Language } from "../Config/Config";
 const Home = () => {
   const url = "https://api.themoviedb.org/3/";
   const [movies, setmovies] = useState([]);
   const [upcomingmovies, setupcomingmovies] = useState([]);
   const [numOfPages, setNumOfPages] = useState();
   const [selectedGenres, setselectedGenres] = useState([]);
-  const [SelectLanguage, setSelectLanguage] = useState([
-    Languages[0],
-    Languages[1],
-  ]);
+  const [SelectLanguage, setSelectLanguage] = useState(Language);
   const [page, setPage] = useState(1);
   const { type } = useContext(TypeContext);
 

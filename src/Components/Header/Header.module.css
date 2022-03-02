@@ -10,6 +10,7 @@
   padding: 0 7px;
   transition: background 0.5s ease-in-out;
   justify-content: space-between;
+  user-select: none;
 }
 .leftContainer {
   display: flex;

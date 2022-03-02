@@ -20,6 +20,7 @@ import {
 import styles from "../styles/MovieDatils.module.css";
 import { motion } from "framer-motion";
 import ColorThief from "colorthief";
+import {GardientCount} from "../Config/Config";
 
 const TopContainer = styled.div`
   display: flex;
@@ -172,7 +173,7 @@ const MovieDatils = ({
 
   const GetBgColour = (e) => {
     var colorThief = new ColorThief();
-    const gradientData = colorThief.getPalette(e.target); //Add number to get more colors default 10
+    const gradientData = colorThief.getPalette(e.target,GardientCount); //Add number to get more colors default 10
     Bgcolour(gradientData);
   };
   const Bgcolour = (gradientData) => {

@@ -98,7 +98,6 @@ const Search = () => {
             id="standard-search"
             type="search"
             // variant="standard"
-            id="fullWidth"
             onChange={(e) => CallFunc(e.target.value)}
           />
         </SearchInputContainer>

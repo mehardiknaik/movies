@@ -5,7 +5,6 @@ import "react-alice-carousel/lib/alice-carousel.css";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { TypeContext } from "../Context/Typestate";
-import { motion } from "framer-motion";
 
 const CurouselContainer = styled.div`
   display: flex;
@@ -44,20 +43,6 @@ const TitleContainer = styled.div`
     margin-bottom: 10px;
   }
 `;
-const animation = {
-  hidden: {
-    opacity: 0,
-    x:-100,
-  },
-  visible: {
-    opacity: 1,
-    x:0,
-    transition: {
-      duration: 1,
-      ease: "easeInOut",
-    },
-  },
-};
 
 const Curousel = ({ upcomingmovies }) => {
   const { type } = useContext(TypeContext);
@@ -94,12 +79,6 @@ const Curousel = ({ upcomingmovies }) => {
   };
 
   return (
-    <motion.div
-      variants={animation}
-      initial="hidden"
-      animate="visible"
-      className="imageContainer"
-    >
       <AliceCarousel
         mouseTracking
         infinite
@@ -113,7 +92,6 @@ const Curousel = ({ upcomingmovies }) => {
         keyboardNavigation
         renderSlideInfo={(e) => console.log("slide change", e)}
       />
-    </motion.div>
   );
 };
 

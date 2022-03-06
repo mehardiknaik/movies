@@ -12,12 +12,14 @@ import {
   SnowFallCount,
   SnowFallStartTimer,
 } from "../../Config/Config";
+import { GetMsg } from "../../Config/GetMsg";
 
 const Header = () => {
   const { pathname } = useLocation();
   const { type } = useContext(TypeContext);
   const [isTop, setisTop] = useState(true);
   const [Snow, setSnow] = useState(false);
+  const Msg=GetMsg();
   const navigate = useNavigate();
 
   const handleScroll = () => {
@@ -77,7 +79,7 @@ const Header = () => {
             </div>
           )}
           <div className={styles.text} onClick={Click}>
-            {type.toUpperCase()}
+            {Msg}
           </div>
         </div>
         <div className={styles.rightcontainer}>

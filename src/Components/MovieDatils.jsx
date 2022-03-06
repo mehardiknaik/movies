@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Noposter from "../Images/Noposter.jpg";
 import calendar from "../Images/calendar.svg";
@@ -20,7 +20,7 @@ import {
 import styles from "../styles/MovieDatils.module.css";
 import { motion } from "framer-motion";
 import ColorThief from "colorthief";
-import {GardientCount} from "../Config/Config";
+import { GardientCount } from "../Config/Config";
 
 const TopContainer = styled.div`
   display: flex;
@@ -51,56 +51,6 @@ const SubTitleContainer = styled.div`
   flex-direction: row;
 `}
 `;
-const BottomContainerAnimation = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.5,
-    },
-  },
-};
-const Leftanimation = {
-  hidden: {
-    x: "-100%",
-    opacity: 0,
-  },
-  visible: {
-    x: 0,
-    opacity: 1,
-    transition: {
-      duration: 1,
-      ease: "easeInOut",
-    },
-  },
-};
-const Rightanimation = {
-  hidden: {
-    x: "100%",
-    opacity: 0,
-  },
-  visible: {
-    x: 0,
-    opacity: 1,
-    transition: {
-      duration: 1,
-      ease: "easeInOut",
-    },
-  },
-};
-const IMGanimation = {
-  hidden: {
-    scale: 1.2,
-    opacity: 0,
-  },
-  visible: {
-    scale: 1,
-    opacity: 1,
-    transition: {
-      duration: 1,
-      ease: "easeInOut",
-    },
-  },
-};
 const lineAnimation = {
   hidden: {
     width: 0,
@@ -147,7 +97,6 @@ const MovieDatils = ({
   name,
   title,
   release_date,
-  vote_average,
   runtime,
   genres,
   spoken_languages,
@@ -165,6 +114,8 @@ const MovieDatils = ({
   tagline,
   episode_run_time,
   number_of_episodes,
+  imdb,
+  watchNow,
 }) => {
   const image = poster_path
     ? `https://image.tmdb.org/t/p/w300/${poster_path}`
@@ -173,7 +124,7 @@ const MovieDatils = ({
 
   const GetBgColour = (e) => {
     var colorThief = new ColorThief();
-    const gradientData = colorThief.getPalette(e.target,GardientCount); //Add number to get more colors default 10
+    const gradientData = colorThief.getPalette(e.target, GardientCount); //Add number to get more colors default 10
     Bgcolour(gradientData);
   };
   const Bgcolour = (gradientData) => {
@@ -184,21 +135,16 @@ const MovieDatils = ({
   return (
     <>
       <TopContainer>
-        <motion.div
-          variants={IMGanimation}
-          initial="hidden"
-          animate="visible"
-          className="imageContainer"
-        >
+        <div className="imageContainer">
           <img
             src={image}
             width={"100%"}
             height={"100%"}
-            alt={title||name}
+            alt={title || name}
             onLoad={GetBgColour}
             crossOrigin="Anonymous"
           />
-        </motion.div>
+        </div>
         <div className="infoContainer">
           <Card variant="outlined" sx={{ background: "#ffffff38" }}>
             <CardContent>
@@ -229,11 +175,18 @@ const MovieDatils = ({
                     {dayjs(release_date).format("D-MMM-YYYY")}
                   </Typography>
                 </div>
-                {vote_average > 0 && (
+                {imdb > 0 && (
                   <div className={styles.Subtitle}>
                     <img src={star} width={14} height={14} alt="" />
                     <Typography sx={{ mr: 1.5 }} color="text.secondary">
-                      {vote_average}
+                      <Typography
+                        sx={{ fontSize: "1.25rem", fontWeight: "600" }}
+                        component="span"
+                        color="text.secondary"
+                      >
+                        {imdb}
+                      </Typography>
+                      /10
                     </Typography>
                   </div>
                 )}
@@ -264,7 +217,7 @@ const MovieDatils = ({
                     Trailer
                   </Button>
                 )}
-                {homepage && (
+                {/* {homepage && (
                   <Button
                     variant="outlined"
                     color="secondary"
@@ -274,7 +227,7 @@ const MovieDatils = ({
                   >
                     Watch Now
                   </Button>
-                )}
+                )} */}
               </Stack>
             </CardContent>
           </Card>
@@ -284,22 +237,37 @@ const MovieDatils = ({
         <Divider variant="middle" sx={{ margin: 1 }} />
       </motion.div>
 
-      <Grid
-        container
-        spacing={2}
-        component={motion.div}
-        variants={BottomContainerAnimation}
-        initial="hidden"
-        animate="visible"
-      >
+      <Grid container spacing={2}>
+        {watchNow.length > 0 && (
+          <Grid item sm={6} xs={12}>
+            <Card variant="outlined" sx={{ background: "#ffffff38" }}>
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  Watch Now
+                </Typography>
+                <div className={styles.WatchNowButton}>
+                  {watchNow.map((el, i) => (
+                    <Button
+                      key={i}
+                      sx={{
+                        width: "fit-content",
+                      }}
+                      variant="outlined"
+                      color="success"
+                      href={el.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {el.provider}
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
         {
-          <Grid
-            item
-            sm={6}
-            xs={12}
-            component={motion.div}
-            variants={Leftanimation}
-          >
+          <Grid item sm={6} xs={12}>
             <Card variant="outlined" sx={{ background: "#ffffff38" }}>
               <CardContent>
                 {status && (
@@ -393,13 +361,7 @@ const MovieDatils = ({
           </Grid>
         }
         {overview && (
-          <Grid
-            item
-            sm={6}
-            xs={12}
-            component={motion.div}
-            variants={Rightanimation}
-          >
+          <Grid item sm={6} xs={12}>
             <Card variant="outlined" sx={{ background: "#ffffff38" }}>
               <CardContent>
                 <Typography variant="h5" component="div">
@@ -413,13 +375,7 @@ const MovieDatils = ({
           </Grid>
         )}
         {seasons?.length > 0 && (
-          <Grid
-            item
-            sm={6}
-            xs={12}
-            component={motion.div}
-            variants={Leftanimation}
-          >
+          <Grid item sm={6} xs={12}>
             <Card variant="outlined" sx={{ background: "#ffffff38" }}>
               <CardContent>
                 {number_of_episodes && (
@@ -451,13 +407,7 @@ const MovieDatils = ({
           </Grid>
         )}
         {cast?.length > 0 && (
-          <Grid
-            item
-            sm={6}
-            xs={12}
-            component={motion.div}
-            variants={seasons?.length > 0 ? Rightanimation : Leftanimation}
-          >
+          <Grid item sm={6} xs={12}>
             <Card variant="outlined" sx={{ background: "#ffffff38" }}>
               <CardContent>
                 <Typography variant="h5" component="div">
@@ -469,13 +419,7 @@ const MovieDatils = ({
           </Grid>
         )}
         {crew.length > 0 && (
-          <Grid
-            item
-            sm={6}
-            xs={12}
-            component={motion.div}
-            variants={seasons?.length > 0 ? Leftanimation : Rightanimation}
-          >
+          <Grid item sm={6} xs={12}>
             <Card variant="outlined" sx={{ background: "#ffffff38" }}>
               <CardContent>
                 <Typography variant="h5" component="div">

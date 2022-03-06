@@ -8,6 +8,8 @@ import { TypeContext } from "../Context/Typestate";
 import Genres from "../Components/Genres";
 import LanguageSelect from "../Components/LanguageSelect";
 import { Language } from "../Config/Config";
+import { motion } from "framer-motion";
+import { Animations } from "../Animations/Animations";
 const Home = () => {
   const url = "https://api.themoviedb.org/3/";
   const [movies, setmovies] = useState([]);
@@ -61,7 +63,14 @@ const Home = () => {
 
   return (
     <>
-      <Container sx={{ marginBottom: "15px" }}>
+      <Container
+        component={motion.div}
+        variants={Animations}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        sx={{ marginBottom: "15px" }}
+      >
         <Stack direction={{ xs: "row" }}>
           <CustomTabs setPage={setPage} setselectedGenres={setselectedGenres} />
           <LanguageSelect

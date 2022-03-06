@@ -1,8 +1,10 @@
 import { Container } from "@mui/material";
 import axios from "axios";
+import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
+import { Animations } from "../Animations/Animations";
 import MovieDatils from "../Components/MovieDatils";
 import MovieDetailBg from "../Components/MovieDetailBg";
 
@@ -12,9 +14,12 @@ const Movie = () => {
   const code = id.split("=")[1];
   const [movie, setMovie] = useState();
   const [trailer, setTrailer] = useState();
+  const [watchNow, setWatchNow] = useState([]);
   const [rgba, setRgba] = useState("rgb(255 255 255), rgb(216 216 216)");
 
   const url = "https://api.themoviedb.org/3/";
+  const WatchNowUrl = "https://api.sumanjay.cf/";
+
   const getMovie = async () => {
     await axios
       .get(`${url}${type}/${code}`, {
@@ -28,6 +33,7 @@ const Movie = () => {
         console.log("data", response.data);
         Gettrailer(response.data.videos.results);
         setMovie(response.data);
+        getWatchNow(response.data.title || response.data.name);
       })
       .catch((err) => console.log("Error===", err));
   };
@@ -49,6 +55,24 @@ const Movie = () => {
       })
       .catch((err) => console.log("Error===", err));
   };
+
+  const getWatchNow = async (title) => {
+    await axios.get(`${WatchNowUrl}/watch/${title}`).then((response) => {
+      const { data } = response;
+      const results = data.find((item) => item.title === title);
+      if (results) {
+        setMovie((prev) => ({ ...prev, ...results.score }));
+        const { providers } = results;
+        if(providers){
+        var ArrayProviders = Object.entries(providers).map(
+          (element) => new Object({ provider: element[0], url: element[1] })
+        );
+        setWatchNow(ArrayProviders);
+        console.log("watch now", ArrayProviders);
+        }
+      }
+    });
+  };
   useEffect(() => {
     getMovie();
   }, []);
@@ -63,13 +87,21 @@ const Movie = () => {
             <meta name="theme-color" content="#84FFC1" />
           </Helmet>
           <MovieDetailBg rgba={rgba} backdrop_path={movie?.backdrop_path} />
-          <Container sx={{ marginBottom: "20px" }}>
+          <Container
+            component={motion.div}
+            variants={Animations}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            sx={{ marginBottom: "20px" }}
+          >
             {/* <Player id="xaYJgKiIH0Q"/> */}
             <MovieDatils
               {...movie}
               setRgba={setRgba}
               NetworkClick={NetworkClick}
               trailer={trailer}
+              watchNow={watchNow}
             />
           </Container>
         </div>

@@ -1,8 +1,10 @@
 import { Container, TextField } from "@mui/material";
 import axios from "axios";
+import { motion } from "framer-motion";
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
+import { Animations } from "../Animations/Animations";
 import CustomTabs from "../Components/CustomTabs";
 import MovieTable from "../Components/MovieTable";
 import { TypeContext } from "../Context/Typestate";
@@ -77,11 +79,18 @@ const Search = () => {
         <meta charSet="utf-8" />
         <title>Search</title>
       </Helmet>
-      <Container sx={{ marginBottom: "15px" }}>
+      <ImageContainer>
+        <img width={"50%"} src={searchbg} alt="searchbg" />
+      </ImageContainer>
+      <Container
+        component={motion.div}
+        variants={Animations}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        sx={{ marginBottom: "15px" }}
+      >
         <CustomTabs setPage={setPage} />
-        <ImageContainer>
-          <img width={"50%"} src={searchbg} alt="searchbg" />
-        </ImageContainer>
         <SearchInputContainer>
           <TextField
             fullWidth

@@ -22,6 +22,11 @@ const SearchInputContainer = styled.div`
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+  position: sticky;
+  top: 54px;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.24);
 `;
 
 const Search = () => {
